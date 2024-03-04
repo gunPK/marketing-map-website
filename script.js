@@ -2,7 +2,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4e
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3', // Replace with your style URL from Mapbox Studio
+    style: 'mapbox://styles/mapbox/streets-v11', // Replace with your style URL from Mapbox Studio
     center: [-95.7129, 37.0902], // Default center on the map (you can adjust this)
     zoom: 3 // Default zoom level
 });
