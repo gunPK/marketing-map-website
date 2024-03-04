@@ -9,7 +9,7 @@ const map = new mapboxgl.Map({
 
 map.on('load', () => {
     // Event listener for clicking on a feature
-    map.on('click', 'gbachpk.0dm2s8tu', (e) => {
+    map.on('click', 'merged-data-points-7n4pjn', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const properties = e.features[0].properties; // Access feature properties
         
@@ -23,12 +23,12 @@ map.on('load', () => {
     });
 
     // Change the cursor to a pointer when it enters a feature in the 'your-layer-id' layer.
-    map.on('mouseenter', 'gbachpk.0dm2s8tu', () => {
+    map.on('mouseenter', 'merged-data-points-7n4pjn', () => {
         map.getCanvas().style.cursor = 'pointer';
     });
 
     // Change it back to a default cursor when it leaves.
-    map.on('mouseleave', 'gbachpk.0dm2s8tu', () => {
+    map.on('mouseleave', 'merged-data-points-7n4pjn', () => {
         map.getCanvas().style.cursor = '';
     });
 });
