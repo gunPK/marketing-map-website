@@ -7,6 +7,21 @@ const map = new mapboxgl.Map({
     zoom: 3 // Default zoom level
 });
 
+map.on('load', function () {
+  // Existing map initialization code
+
+  // Initialize the Geocoder
+  var geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl,
+    marker: false // Set to true if you want a marker to appear at the search location
+  });
+
+  // Add the geocoder to your map
+  document.getElementById('map').appendChild(geocoder.onAdd(map));
+});
+
+
 map.on('load', () => {
     // Event listener for clicking on a feature within the specified layer
     map.on('click', 'merged-data-points-7n4pjn', (e) => {
