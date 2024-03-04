@@ -9,7 +9,7 @@ const map = new mapboxgl.Map({
 
 map.on('load', () => {
     // Event listener for clicking on a feature
-    map.on('click', 'your-layer-id', (e) => {
+    map.on('click', 'gbachpk.0dm2s8tu', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const properties = e.features[0].properties; // Access feature properties
         
