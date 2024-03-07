@@ -20,20 +20,8 @@ body, html {
 }
 
 #reset-button {
-    position: absolute;
-    top: 10px; /* Align with the top of the Geocoder */
-    /* Adjust this calculation to position the reset button directly to the left of the Geocoder */
-    left: calc(50% - 15%); /* This needs adjustment based on the actual width of your elements */
-    z-index: 1; /* Ensure it's above the map */
-    background: #fff;
-    border: 1px solid #ccc;
-    /* Adjust padding to match the height of the Geocoder, consider matching font size and line-height if necessary */
-    padding: 10px 12px; 
-    cursor: pointer;
-    border-radius: 4px;
-    /* Match the font size and line-height with the Geocoder for consistent height */
-    font-size: 14px; /* Assuming this matches the Geocoder */
-    line-height: 16px; /* Adjust based on the Geocoder's line-height */
-    box-sizing: border-box; /* Ensures padding is included in the height */
+    margin-right: 8px; /* Spacing between the reset button and the search bar */
+    /* Add more styling here to match the Geocoder's style */
 }
+
 
