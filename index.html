@@ -4,26 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Map</title>
-    <!-- Update the Mapbox GL JS CSS link to the version you wish to use -->
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <link
-      rel="stylesheet"
-      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css"
-      type="text/css"
-    />
-    <script
-      src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"
-    ></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css"/>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>
 </head>
 <body>
 
-<div id="map">
-    <!-- The container will be dynamically populated with the Geocoder and the reset button -->
+<!-- Popup Form for Postal Code and Email -->
+<div id="formPopup" class="modal">
+    <div class="modal-content">
+        <h2>Please Enter Your Details</h2>
+        <form id="accessForm">
+            <label for="postalCode">Postal Code:</label>
+            <input type="text" id="postalCode" name="postalCode" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
 </div>
 
+<div id="map"></div>
 
-<!-- Update the Mapbox GL JS script source to the version you wish to use -->
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.0/mapbox-gl.js"></script>
 <script src="script.js"></script>
 </body>
