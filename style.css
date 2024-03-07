@@ -10,18 +10,40 @@ body, html {
     width: 100%;
 }
 
-.mapboxgl-ctrl-geocoder {
+#controls-container {
+    display: flex;
+    align-items: center; /* Vertically align items in the container */
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1; /* Ensure the container is above the map */
+}
+
+.mapboxgl-ctrl-geocoder {
+    flex-shrink: 0; /* Prevent the Geocoder from shrinking */
+    margin: 0 2px; /* Provide spacing on both sides */
     width: 50%; /* Adjust this width as necessary */
-    z-index: 1; /* Ensure it's above the map */
 }
 
 #reset-button {
-    margin-right: 8px; /* Spacing between the reset button and the search bar */
-    /* Add more styling here to match the Geocoder's style */
+    background-color: #fff; /* Match the Geocoder's background color */
+    border: 1px solid #ccc; /* Similar to the Geocoder's border */
+    padding: 6px 12px; /* Adjust padding to match the height of the Geocoder */
+    cursor: pointer;
+    border-radius: 4px; /* Rounded corners like the Geocoder */
+    font-size: 14px; /* Font size to match the Geocoder */
+    margin-right: 2px; /* Spacing between the reset button and the search bar */
+    flex-shrink: 0; /* Prevent the button from shrinking */
 }
 
-
+@media (max-width: 600px) {
+    .mapboxgl-ctrl-geocoder {
+        width: 70%; /* Adjust width for smaller screens */
+    }
+    #controls-container {
+        top: 5px; /* Optionally adjust the container's top position on smaller screens */
+        left: 50%; /* Keep centered, but adjust as needed */
+        transform: translateX(-50%); /* Ensure center alignment */
+    }
+}
