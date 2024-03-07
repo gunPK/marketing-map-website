@@ -1,72 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Display the modal form immediately
+    // Initialize the map right away but with interactions disabled
+    initMap();
+
+    // Display the modal form on top of the map
     const formPopup = document.getElementById('formPopup');
     formPopup.style.display = 'block';
 
+    // Handle the form submission to enable map interactions
     document.getElementById('accessForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting in the traditional way
+        event.preventDefault(); // Prevent default form submission
 
-        // Extract values from form
+        // Extract values from the form
         var postalCode = document.getElementById('postalCode').value;
         var email = document.getElementById('email').value;
 
-        // Here, you'd send the data to a server or process it as needed
+        // Here, send the postalCode and email to your server or process as needed
         console.log('Postal Code:', postalCode, 'Email:', email);
 
-        // Hide the form popup
+        // Hide the modal form
         formPopup.style.display = 'none';
 
-        // Proceed to initialize the map
-        initMap();
+        // Enable interactions with the map
+        enableMapInteractions();
     });
 });
 
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
-
     const map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3', // style URL
+        container: 'map', // container ID
+        style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3', // map style URL
         center: [-95.7129, 37.0902], // starting position [lng, lat]
-        zoom: 3 // starting zoom
+        zoom: 3, // starting zoom level
+        interactive: false // initially disable map interactions
     });
 
-    // After the map loads, add controls and other map interactions here
-    map.on('load', () => {
-        // Initialize the Geocoder
-        const geocoder = new MapboxGeocoder({
-            accessToken: mapboxgl.accessToken,
-            mapboxgl: mapboxgl,
-            marker: false
-        });
+    // Store the map instance for later use
+    window.mapInstance = map;
+}
 
-        // Create a container for the Geocoder and the reset button
-        const controlsContainer = document.createElement('div');
-        controlsContainer.setAttribute('style', 'position: absolute; top: 10px; left: 50%; transform: translateX(-50%); display: flex; align-items: center;');
-        controlsContainer.id = 'controls-container';
-
-        // Append the Geocoder to the container
-        controlsContainer.appendChild(geocoder.onAdd(map));
-
-        // Create and configure the reset button
-        const resetButton = document.createElement('button');
-        resetButton.textContent = 'Reset View';
-        resetButton.id = 'reset-button';
-        resetButton.setAttribute('style', 'margin-right: 8px;');
-        resetButton.addEventListener('click', () => {
-            map.flyTo({
-                center: [-95.7129, 37.0902],
-                zoom: 3,
-                essential: true
-            });
-        });
-
-        // Insert the reset button before the Geocoder in the container
-        controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
-
-        // Append the container to the map
-        document.getElementById('map').appendChild(controlsContainer);
-
-        // Additional map interactions like 'click' events for map features can be added here
-    });
+function enableMapInteractions() {
+    if (window.mapInstance) {
+        // Enable all interactions
+        window.mapInstance.boxZoom.enable();
+        window.mapInstance.scrollZoom.enable();
+        window.mapInstance.dragRotate.enable();
+        window.mapInstance.dragPan.enable();
+        window.mapInstance.keyboard.enable();
+        window.mapInstance.doubleClickZoom.enable();
+        window.mapInstance.touchZoomRotate.enable();
+    }
 }
