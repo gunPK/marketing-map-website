@@ -12,16 +12,12 @@ map.on('load', () => {
     var geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-        marker: false // Set to true if you want a marker to appear at the search location
+        marker: false // Optional: set to true if you want a marker to appear at the search location
     });
 
     // Add the geocoder to your map
     document.getElementById('map').appendChild(geocoder.onAdd(map));
 
-    // Move reset button to the left of the search bar (Geocoder)
-    document.querySelector('.mapboxgl-ctrl-geocoder').insertAdjacentElement('beforebegin', document.getElementById('reset-button'));
-
-    // Event listener for clicking on a feature within the specified layer
     map.on('click', 'merged-data-points-7n4pjn', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const properties = e.features[0].properties;
@@ -34,22 +30,19 @@ map.on('load', () => {
             .addTo(map);
     });
 
-    // Change the cursor to a pointer when it enters a feature in the layer
     map.on('mouseenter', 'merged-data-points-7n4pjn', () => {
         map.getCanvas().style.cursor = 'pointer';
     });
 
-    // Revert the cursor to the default when it leaves a feature in the layer
     map.on('mouseleave', 'merged-data-points-7n4pjn', () => {
         map.getCanvas().style.cursor = '';
     });
 
-    // Reset button functionality to move the map back to the initial position
     document.getElementById('reset-button').addEventListener('click', function() {
         map.flyTo({
-            center: [-95.7129, 37.0902], // Original center
-            zoom: 3, // Original zoom level
-            essential: true // This ensures the animation is performed
+            center: [-95.7129, 37.0902],
+            zoom: 3,
+            essential: true
         });
     });
 });
