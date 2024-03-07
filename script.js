@@ -51,3 +51,12 @@ map.on('load', () => {
         map.getCanvas().style.cursor = '';
     });
 });
+
+document.getElementById('reset-button').addEventListener('click', function() {
+    map.flyTo({
+        center: [-95.7129, 37.0902], // Original center
+        zoom: 3, // Original zoom level
+        essential: true // This ensures the animation is performed
+    });
+});
+
