@@ -1,53 +1,64 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the map right away but with interactions disabled
-    initMap();
-
-    // Display the modal form on top of the map
+document.addEventListener('DOMContentLoaded', function() {
     const formPopup = document.getElementById('formPopup');
     formPopup.style.display = 'block';
 
-    // Handle the form submission to enable map interactions
     document.getElementById('accessForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        // Extract values from the form
+        event.preventDefault();
+        formPopup.style.display = 'none';
+        
         var postalCode = document.getElementById('postalCode').value;
         var email = document.getElementById('email').value;
-
-        // Here, send the postalCode and email to your server or process as needed
         console.log('Postal Code:', postalCode, 'Email:', email);
 
-        // Hide the modal form
-        formPopup.style.display = 'none';
-
-        // Enable interactions with the map
+        // Enable interactions with the map, including the Geocoder and reset button
         enableMapInteractions();
     });
+
+    initMap();
 });
 
 function initMap() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
-    const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3', // map style URL
-        center: [-95.7129, 37.0902], // starting position [lng, lat]
-        zoom: 3, // starting zoom level
-        interactive: false // initially disable map interactions
+    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+    window.map = new mapboxgl.Map({
+        container: 'map',
+        style: 'YOUR_MAP_STYLE',
+        center: [-95.7129, 37.0902],
+        zoom: 3,
+        interactive: false // Start with a non-interactive map
     });
 
-    // Store the map instance for later use
-    window.mapInstance = map;
+    // Add the Geocoder and reset button but keep them disabled initially
+    const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        marker: false
+    });
+
+    document.getElementById('map').appendChild(geocoder.onAdd(window.map));
+
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Reset View';
+    resetButton.id = 'reset-button';
+    resetButton.onclick = function() {
+        window.map.flyTo({
+            center: [-95.7129, 37.0902],
+            zoom: 3
+        });
+    };
+    document.getElementById('map').appendChild(resetButton);
 }
 
 function enableMapInteractions() {
-    if (window.mapInstance) {
-        // Enable all interactions
-        window.mapInstance.boxZoom.enable();
-        window.mapInstance.scrollZoom.enable();
-        window.mapInstance.dragRotate.enable();
-        window.mapInstance.dragPan.enable();
-        window.mapInstance.keyboard.enable();
-        window.mapInstance.doubleClickZoom.enable();
-        window.mapInstance.touchZoomRotate.enable();
-    }
+    // Enable map interactions
+    window.map.boxZoom.enable();
+    window.map.scrollZoom.enable();
+    window.map.dragPan.enable();
+    window.map.dragRotate.enable();
+    window.map.keyboard.enable();
+    window.map.doubleClickZoom.enable();
+    window.map.touchZoomRotate.enable();
+
+    // Enable or visually activate the Geocoder and reset button if necessary
+    document.getElementById('reset-button').style.visibility = 'visible';
+    // You may need to adjust the visibility or interactivity of the Geocoder separately
 }
