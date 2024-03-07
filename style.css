@@ -28,7 +28,7 @@ body, html {
     background: #fff;
     border: 1px solid #ccc;
     /* Adjust padding to match the height of the Geocoder, consider matching font size and line-height if necessary */
-    padding: 10px 12px; 
+    padding: 10px 10px; 
     cursor: pointer;
     border-radius: 4px;
     /* Match the font size and line-height with the Geocoder for consistent height */
