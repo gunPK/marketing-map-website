@@ -52,7 +52,7 @@ function initMap() {
             var properties = e.features[0].properties;
             if (!properties) return; // Check if properties exist
             
-            var description = `<h4>${properties.NAME}</h4><p>${properties.location_count}<br>${properties.contractor_count}<br>${properties.message_count}</p>`; // Customize based on your data properties
+            var description = `<h4>${properties.NAME}</h4><p>Location Count: ${properties.location_count}<br>Contractor Count: ${properties.contractor_count}<br>Message Count: ${properties.message_count}</p>`; // Customize based on your data properties
 
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
