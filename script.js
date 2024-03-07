@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const postalCode = document.getElementById('postalCode').value;
         const email = document.getElementById('email').value;
-        console.log('Postal Code:', postalCode, 'Email:', email);
+        const companyName = document.getElementById('companyName').value;
+        console.log('Postal Code:', postalCode, 'Email:', email, 'Company Name:', companyName);
 
         // Hide the modal overlay upon form submission and enable map interactions
         hideModal();
