@@ -46,7 +46,7 @@ function initMap() {
         setupControls();
         
         // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
-        map.on('click', 'YOUR_LAYER_ID', function(e) { // Replace 'YOUR_LAYER_ID' with your actual layer ID
+        map.on('click', 'merged-data-points-7n4pjn', function(e) { // Replace 'YOUR_LAYER_ID' with your actual layer ID
             var coordinates = e.features[0].geometry.coordinates.slice();
             var description = `<h4>${e.features[0].properties.name}</h4><p>${e.features[0].properties.description}</p>`; // Customize based on your data properties
 
