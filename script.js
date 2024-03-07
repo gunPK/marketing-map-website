@@ -32,7 +32,7 @@ map.on('load', () => {
         
         // Example description - customize this to include the information you want to display
         // This assumes your feature has a property named 'NAME'
-        const description = `<h4>${properties.NAME}</h4><p>Message Count: ${properties.message_count}\nContractor Count: ${properties.contractor_count}</p>`;
+        const description = `<h4>${properties.NAME}</h4><p>Message Count: ${properties.message_count}<br>Contractor Count: ${properties.contractor_count}</p>`;
         
         // Create and show a popup with the feature's information
         new mapboxgl.Popup()
