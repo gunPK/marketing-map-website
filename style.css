@@ -23,7 +23,7 @@ body, html {
     position: absolute;
     top: 10px; /* Align with the top of the Geocoder */
     /* Adjust this calculation to position the reset button directly to the left of the Geocoder */
-    left: calc(50% - 28%); /* This needs adjustment based on the actual width of your elements */
+    left: calc(50% - 15%); /* This needs adjustment based on the actual width of your elements */
     z-index: 1; /* Ensure it's above the map */
     background: #fff;
     border: 1px solid #ccc;
