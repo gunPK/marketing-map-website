@@ -1,27 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Show the modal form overlay initially
     const modalOverlay = document.getElementById('modalOverlay');
-    modalOverlay.style.display = 'flex';
+    
+    // Initially display the modal overlay
+    showModal();
 
     // Form submission event listener
     document.getElementById('accessForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission behavior
 
-        // Hide the modal overlay upon form submission
-        modalOverlay.style.display = 'none';
-
-        // Optionally, process form data here (e.g., log to console or send to a server)
         const postalCode = document.getElementById('postalCode').value;
         const email = document.getElementById('email').value;
         console.log('Postal Code:', postalCode, 'Email:', email);
 
-        // Enable map interactions after form submission
+        // Hide the modal overlay upon form submission and enable map interactions
+        hideModal();
         enableMapInteractions();
     });
 
     // Initialize the map in a non-interactive state
     initMap();
 });
+
+function showModal() {
+    const modalOverlay = document.getElementById('modalOverlay');
+    modalOverlay.classList.add('show'); // Use CSS transitions for smooth appearance
+}
+
+function hideModal() {
+    const modalOverlay = document.getElementById('modalOverlay');
+    modalOverlay.classList.remove('show'); // Use CSS transitions for smooth disappearance
+}
 
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
@@ -30,13 +38,10 @@ function initMap() {
         style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3',
         center: [-95.7129, 37.0902],
         zoom: 3,
-        interactive: false // Map starts as non-interactive
+        interactive: false
     });
 
-    map.on('load', () => {
-        // After map load, initialize and append the Geocoder and reset button
-        setupControls();
-    });
+    map.on('load', setupControls);
 }
 
 function setupControls() {
@@ -47,16 +52,15 @@ function setupControls() {
     });
 
     const controlsContainer = document.createElement('div');
-    controlsContainer.setAttribute('style', 'position: absolute; top: 10px; left: 50%; transform: translateX(-50%); display: flex; align-items: center;');
     controlsContainer.id = 'controls-container';
+    document.getElementById('map').appendChild(controlsContainer);
 
     controlsContainer.appendChild(geocoder.onAdd(map));
 
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
     resetButton.id = 'reset-button';
-    resetButton.setAttribute('style', 'margin-right: 8px;');
-    resetButton.addEventListener('click', () => {
+    resetButton.addEventListener('click', function() {
         map.flyTo({
             center: [-95.7129, 37.0902],
             zoom: 3,
@@ -65,7 +69,6 @@ function setupControls() {
     });
 
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
-    document.getElementById('map').appendChild(controlsContainer);
 }
 
 function enableMapInteractions() {
@@ -76,6 +79,6 @@ function enableMapInteractions() {
     map.keyboard.enable();
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
-    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // Reset or set style if needed
-    // Now, the map is interactive.
+    // Additionally, make the map interactive
+    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3');
 }
