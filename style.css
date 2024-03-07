@@ -12,38 +12,68 @@ body, html {
 
 #controls-container {
     display: flex;
-    align-items: center; /* Vertically align items in the container */
+    align-items: center;
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1; /* Ensure the container is above the map */
+    z-index: 2; /* Ensure the container is above the modal */
 }
 
 .mapboxgl-ctrl-geocoder {
-    flex-shrink: 0; /* Prevent the Geocoder from shrinking */
-    margin: 0 2px; /* Provide spacing on both sides */
-    width: 50%; /* Adjust this width as necessary */
+    flex-shrink: 0;
+    margin: 0 2px;
+    width: 50%;
 }
 
 #reset-button {
-    background-color: #fff; /* Match the Geocoder's background color */
-    border: 1px solid #ccc; /* Similar to the Geocoder's border */
-    padding: 6px 12px; /* Adjust padding to match the height of the Geocoder */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
     cursor: pointer;
-    border-radius: 4px; /* Rounded corners like the Geocoder */
-    font-size: 14px; /* Font size to match the Geocoder */
-    margin-right: 2px; /* Spacing between the reset button and the search bar */
-    flex-shrink: 0; /* Prevent the button from shrinking */
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 2px;
+    flex-shrink: 0;
 }
 
 @media (max-width: 600px) {
     .mapboxgl-ctrl-geocoder {
-        width: 70%; /* Adjust width for smaller screens */
+        width: 70%;
     }
     #controls-container {
-        top: 5px; /* Optionally adjust the container's top position on smaller screens */
-        left: 50%; /* Keep centered, but adjust as needed */
-        transform: translateX(-50%); /* Ensure center alignment */
+        top: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 3; /* Sit on top of everything */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Responsive adjustments for modal */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
     }
 }
