@@ -62,12 +62,15 @@ function setupControls() {
     resetButton.textContent = 'Reset View';
     resetButton.id = 'reset-button';
     resetButton.addEventListener('click', function() {
-        map.flyTo({
-            center: [-95.7129, 37.0902],
-            zoom: 3,
-            essential: true
+    map.flyTo({
+        center: [-95.7129, 37.0902], // Original center
+        zoom: 3, // Original zoom level
+        bearing: 0, // Reset map rotation
+        pitch: 0, // Reset map tilt
+        essential: true // This ensures the animation is smooth and essential for the view
         });
     });
+
 
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
 }
