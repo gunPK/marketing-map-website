@@ -132,3 +132,16 @@ body, html {
 .modal-content.show {
     transform: translateY(0);
 }
+
+/* Logo container style */
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
