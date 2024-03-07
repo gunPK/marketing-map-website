@@ -2,47 +2,72 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4e
 
 const map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3', // Your Mapbox style URL
-    center: [-95.7129, 37.0902], // Default map center [longitude, latitude]
-    zoom: 3 // Default zoom level
+    style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3',
+    center: [-95.7129, 37.0902],
+    zoom: 3
 });
 
 map.on('load', () => {
     // Initialize the Geocoder
-    var geocoder = new MapboxGeocoder({
+    const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-        marker: false // Optional: set to true if you want a marker to appear at the search location
+        marker: false
     });
 
-    // Add the geocoder to your map
-    document.getElementById('map').appendChild(geocoder.onAdd(map));
+    // Create a container for the Geocoder and the reset button
+    const controlsContainer = document.createElement('div');
+    controlsContainer.style.position = 'absolute';
+    controlsContainer.style.top = '10px';
+    controlsContainer.style.left = '50%';
+    controlsContainer.style.transform = 'translateX(-50%)';
+    controlsContainer.style.display = 'flex';
+    controlsContainer.style.alignItems = 'center';
+    controlsContainer.id = 'controls-container';
 
+    // Append the Geocoder to the container
+    controlsContainer.appendChild(geocoder.onAdd(map));
+
+    // Create and configure the reset button
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Reset View';
+    resetButton.id = 'reset-button';
+    resetButton.style.marginRight = '8px'; // Adds space between the reset button and the search bar
+
+    // Insert the reset button before the Geocoder in the container
+    controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
+
+    // Append the container to the map
+    document.getElementById('map').appendChild(controlsContainer);
+
+    // Reset button functionality to move the map back to the initial position
+    resetButton.addEventListener('click', () => {
+        map.flyTo({
+            center: [-95.7129, 37.0902],
+            zoom: 3,
+            essential: true
+        });
+    });
+
+    // Add click event listeners for the features
     map.on('click', 'merged-data-points-7n4pjn', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const properties = e.features[0].properties;
-        
+
         const description = `<h4>${properties.NAME}</h4><p>Message Count: ${properties.message_count}<br>Contractor Count: ${properties.contractor_count}</p>`;
-        
+
         new mapboxgl.Popup()
             .setLngLat(coordinates)
             .setHTML(description)
             .addTo(map);
     });
 
+    // Cursor style changes on feature enter/leave
     map.on('mouseenter', 'merged-data-points-7n4pjn', () => {
         map.getCanvas().style.cursor = 'pointer';
     });
 
     map.on('mouseleave', 'merged-data-points-7n4pjn', () => {
         map.getCanvas().style.cursor = '';
-    });
-
-    document.getElementById('reset-button').addEventListener('click', function() {
-        map.flyTo({
-            center: [-95.7129, 37.0902],
-            zoom: 3,
-            essential: true
-        });
     });
 });
