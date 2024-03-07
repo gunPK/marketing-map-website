@@ -10,38 +10,23 @@ body, html {
     width: 100%;
 }
 
-/* Adjustments and additions below */
-
-/* This positions the Geocoder, now implicitly including the reset button */
 .mapboxgl-ctrl-geocoder {
     position: absolute;
     top: 10px;
-    left: 10px; /* Adjust as necessary, 10px from the left for example */
-    width: 40%; /* Adjust based on your preference and the width of your map */
-    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%; /* Adjust this width as necessary */
+    z-index: 1; /* Ensure it's above the map */
 }
 
-/* Style for the reset button to ensure it matches the design of the geocoder */
 #reset-button {
-    background-color: #fff; /* Match the Geocoder's background color */
-    border: 1px solid rgba(0,0,0,0.1); /* Similar border to Geocoder */
-    border-radius: 4px; /* Match the Geocoder's rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    padding: 6px 12px; /* Padding similar to Geocoder */
-    margin-right: 8px; /* Space between the reset button and the Geocoder */
-    font-size: 14px; /* Match the Geocoder's font size */
-    line-height: 24px; /* Line height for vertical alignment */
-    vertical-align: top; /* Align with the Geocoder */
-}
-
-/* Adjusts the Geocoder's input to align with the reset button */
-.mapboxgl-ctrl-geocoder > div {
-    display: inline-block;
-    vertical-align: top; /* Align the search input vertically with the reset button */
-    width: calc(100% - 50px); /* Adjust width to account for reset button, change 50px as needed */
-}
-
-/* Ensure the reset button appears on the same line as the Geocoder */
-.mapboxgl-ctrl-geocoder, #reset-button {
-    display: inline-block;
+    position: absolute;
+    top: 10px; /* Align with the top of the Geocoder */
+    left: calc(25% - 40px); /* Adjust this to position it to the left of the Geocoder */
+    z-index: 1; /* Ensure it's above the map */
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
 }
