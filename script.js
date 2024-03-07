@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const postalCode = document.getElementById('postalCode').value;
         const email = document.getElementById('email').value;
         const companyName = document.getElementById('companyName').value;
-        console.log('Postal Code:', postalCode, ',', 'Email:', email, ',', 'Company Name:', companyName);
+        console.log('Postal Code:', postalCode, 'Email:', email, 'Company Name:', companyName);
 
         // Hide the modal overlay upon form submission and enable map interactions
         hideModal();
@@ -42,7 +42,20 @@ function initMap() {
         interactive: false
     });
 
-    map.on('load', setupControls);
+    map.on('load', function() {
+        setupControls();
+        
+        // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
+        map.on('click', 'YOUR_LAYER_ID', function(e) { // Replace 'YOUR_LAYER_ID' with your actual layer ID
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var description = `<h4>${e.features[0].properties.name}</h4><p>${e.features[0].properties.description}</p>`; // Customize based on your data properties
+
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+    });
 }
 
 function setupControls() {
@@ -62,15 +75,14 @@ function setupControls() {
     resetButton.textContent = 'Reset View';
     resetButton.id = 'reset-button';
     resetButton.addEventListener('click', function() {
-    map.flyTo({
-        center: [-95.7129, 37.0902], // Original center
-        zoom: 3, // Original zoom level
-        bearing: 0, // Reset map rotation
-        pitch: 0, // Reset map tilt
-        essential: true // This ensures the animation is smooth and essential for the view
+        map.flyTo({
+            center: [-95.7129, 37.0902],
+            zoom: 3,
+            bearing: 0,
+            pitch: 0,
+            essential: true
         });
     });
-
 
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
 }
@@ -83,6 +95,5 @@ function enableMapInteractions() {
     map.keyboard.enable();
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
-    // Additionally, make the map interactive
-    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3');
+    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
 }
