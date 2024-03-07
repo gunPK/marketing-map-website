@@ -12,68 +12,65 @@ body, html {
 
 #controls-container {
     display: flex;
-    align-items: center;
+    align-items: center; /* Vertically align items in the container */
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 2; /* Ensure the container is above the modal */
+    z-index: 2; /* Ensure the container is above the map */
 }
 
 .mapboxgl-ctrl-geocoder {
-    flex-shrink: 0;
-    margin: 0 2px;
-    width: 50%;
+    flex-shrink: 0; /* Prevent the Geocoder from shrinking */
+    margin: 0 2px; /* Provide spacing on both sides */
+    width: 50%; /* Adjust this width as necessary */
 }
 
 #reset-button {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 6px 12px;
+    background-color: #fff; /* Match the Geocoder's background color */
+    border: 1px solid #ccc; /* Similar to the Geocoder's border */
+    padding: 6px 12px; /* Adjust padding to match the height of the Geocoder */
     cursor: pointer;
-    border-radius: 4px;
-    font-size: 14px;
-    margin-right: 2px;
-    flex-shrink: 0;
+    border-radius: 4px; /* Rounded corners like the Geocoder */
+    font-size: 14px; /* Font size to match the Geocoder */
+    margin-right: 2px; /* Spacing between the reset button and the search bar */
+    flex-shrink: 0; /* Prevent the button from shrinking */
 }
 
 @media (max-width: 600px) {
     .mapboxgl-ctrl-geocoder {
-        width: 70%;
+        width: 70%; /* Adjust width for smaller screens */
     }
     #controls-container {
-        top: 5px;
-        left: 50%;
-        transform: translateX(-50%);
+        top: 5px; /* Optionally adjust the container's top position on smaller screens */
+        left: 50%; /* Keep centered, but adjust as needed */
+        transform: translateX(-50%); /* Ensure center alignment */
     }
 }
 
-/* Modal Styles */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 3; /* Sit on top of everything */
-    left: 0;
+/* Overlay style */
+.modal-overlay {
+    position: fixed;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 3; /* Make sure this is above the map but below the controls */
+    display: none; /* Hidden by default, shown via JavaScript */
+    justify-content: center;
+    align-items: center;
 }
 
+/* Modal box style */
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    background: #fff;
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 4; /* Above the overlay */
+    width: 90%;
+    max-width: 500px; /* Adjust based on your preference */
 }
 
-/* Responsive adjustments for modal */
-@media (max-width: 600px) {
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-    }
-}
+/* Additional styles for form elements inside the modal as needed */
