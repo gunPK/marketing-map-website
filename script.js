@@ -48,7 +48,7 @@ function initMap() {
         // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
         map.on('click', 'merged-data-points-7n4pjn', function(e) { // Replace 'YOUR_LAYER_ID' with your actual layer ID
             var coordinates = e.features[0].geometry.coordinates.slice();
-            var description = `<h4>${e.features[0].properties.name}</h4><p>${e.features[0].properties.description}</p>`; // Customize based on your data properties
+            var description = `<h4>${properties.NAME}</h4><p>${properties.location_count}<br>${properties.contractor_count}<br>${properties.message_count}</p>`; // Customize based on your data properties
 
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
