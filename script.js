@@ -45,7 +45,6 @@ function initMap() {
     map.on('load', function() {
         setupControls();
         
-        // Add click event for pins
         map.on('click', 'merged-data-points-7n4pjn', function(e) {
             var coordinates = e.features[0].geometry.coordinates.slice();
             var properties = e.features[0].properties;
@@ -69,31 +68,13 @@ function setupControls() {
 
     geocoder.on('result', function(e) {
         const searchCoordinates = e.result.geometry.coordinates;
-        // Find the nearest feature
-        map.once('idle', () => {
-            const features = map.queryRenderedFeatures({layers: ['merged-data-points-7n4pjn']});
-            let nearestFeature = null;
-            let nearestDistance = Infinity;
-            features.forEach(feature => {
-                const distance = calculateDistance(searchCoordinates, feature.geometry.coordinates);
-                if (distance < nearestDistance) {
-                    nearestDistance = distance;
-                    nearestFeature = feature;
-                }
-            });
-            if (nearestFeature) {
-                map.flyTo({
-                    center: nearestFeature.geometry.coordinates,
-                    zoom: 15 // Adjust zoom level as needed
-                });
-            }
+        map.once('moveend', () => {
+            const center = map.getCenter().toArray();
+            findNearestFeature(center);
         });
     });
 
-    const controlsContainer = document.createElement('div');
-    controlsContainer.id = 'controls-container';
-    document.getElementById('map').appendChild(controlsContainer);
-    controlsContainer.appendChild(geocoder.onAdd(map));
+    document.getElementById('controls-container').appendChild(geocoder.onAdd(map));
 
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
@@ -107,10 +88,31 @@ function setupControls() {
             essential: true
         });
     });
-    controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
+    document.getElementById('controls-container').appendChild(resetButton);
+}
+
+function findNearestFeature(center) {
+    const features = map.queryRenderedFeatures({layers: ['merged-data-points-7n4pjn']});
+    let nearestFeature = null;
+    let nearestDistance = Infinity;
+    features.forEach(feature => {
+        const distance = calculateDistance(center, feature.geometry.coordinates);
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestFeature = feature;
+        }
+    });
+
+    if (nearestFeature) {
+        map.flyTo({
+            center: nearestFeature.geometry.coordinates,
+            zoom: 15 // Adjust zoom level as needed
+        });
+    }
 }
 
 function enableMapInteractions() {
+    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
     map.boxZoom.enable();
     map.scrollZoom.enable();
     map.dragRotate.enable();
@@ -118,20 +120,15 @@ function enableMapInteractions() {
     map.keyboard.enable();
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
-    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // Re-enable interactive map style
 }
 
 function calculateDistance(from, to) {
-    // Placeholder for Haversine formula implementation
     const [lon1, lat1] = from;
     const [lon2, lat2] = to;
     const R = 6371; // Earth's radius in kilometers
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
 }
