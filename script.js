@@ -69,16 +69,46 @@ function setupControls() {
         marker: false
     });
 
+    // ADJUST ZOOM LEVEL ON SEARCH RESULT
+    // geocoder.on('result', function(e) {
+    //     // Extract coordinates from the geocoder result
+    //     const coordinates = e.result.center;
+    //     // Fly to the coordinates with a custom zoom level
+    //     map.flyTo({
+    //         center: coordinates,
+    //         zoom: 10,
+    //         essential: true
+    //     });
+    // });
+
+    // BRING TO NEAREST PLOTTED POINT ON SEARCH
     geocoder.on('result', function(e) {
         // Extract coordinates from the geocoder result
         const coordinates = e.result.center;
-        // Fly to the coordinates with a custom zoom level
-        map.flyTo({
-            center: coordinates,
-            zoom: 10,
-            essential: true
-        });
+    
+        // Query the rendered features to find the nearest one to the searched location
+        const nearestFeature = map.queryRenderedFeatures(coordinates, { layers: ['merged-data-points-7n4pjn'] })[0];
+    
+        if (nearestFeature) {
+            // Extract coordinates of the nearest feature
+            const nearestCoordinates = nearestFeature.geometry.coordinates;
+    
+            // Fly to the coordinates of the nearest feature with a custom zoom level
+            map.flyTo({
+                center: nearestCoordinates,
+                zoom: 10, // Adjust the zoom level as desired
+                essential: true
+            });
+        } else {
+            // If no nearest feature is found, simply fly to the searched coordinates
+            map.flyTo({
+                center: coordinates,
+                zoom: 10, // Adjust the zoom level as desired
+                essential: true
+            });
+        }
     });
+
 
     const controlsContainer = document.createElement('div');
     controlsContainer.id = 'controls-container';
