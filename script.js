@@ -3,28 +3,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initially display the modal overlay
     showModal();
+
     // Form submission event listener
     document.getElementById('accessForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission behavior
+
         const postalCode = document.getElementById('postalCode').value;
         const email = document.getElementById('email').value;
         const companyName = document.getElementById('companyName').value;
         console.log('Postal Code:', postalCode, 'Email:', email, 'Company Name:', companyName);
+
         // Hide the modal overlay upon form submission and enable map interactions
         hideModal();
         enableMapInteractions();
     });
+
     // Initialize the map in a non-interactive state
     initMap();
 });
+
 function showModal() {
     const modalOverlay = document.getElementById('modalOverlay');
     modalOverlay.classList.add('show'); // Use CSS transitions for smooth appearance
 }
+
 function hideModal() {
     const modalOverlay = document.getElementById('modalOverlay');
     modalOverlay.classList.remove('show'); // Use CSS transitions for smooth disappearance
 }
+
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
     window.map = new mapboxgl.Map({
@@ -34,18 +41,17 @@ function initMap() {
         zoom: 3,
         interactive: false
     });
+
     map.on('load', function() {
         setupControls();
         
-        // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
-        map.on('click', 'merged-data-points-7n4pjn', function(e) { // Replace 'YOUR_LAYER_ID' with your actual layer ID
+        // Add click event for pins
+        map.on('click', 'merged-data-points-7n4pjn', function(e) {
             var coordinates = e.features[0].geometry.coordinates.slice();
-            
             var properties = e.features[0].properties;
-            if (!properties) return; // Check if properties exist
+            if (!properties) return;
 
-            var description = `<h4>${properties.NAME}</h4><p>Location Count: ${properties.location_count}<br>Contractor Count: ${properties.contractor_count}<br>Message Count: ${properties.message_count}</p>`; // Customize based on your data properties
-
+            var description = `<h4>${properties.NAME}</h4><p>Location Count: ${properties.location_count}<br>Contractor Count: ${properties.contractor_count}<br>Message Count: ${properties.message_count}</p>`;
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
                 .setHTML(description)
@@ -53,16 +59,42 @@ function initMap() {
         });
     });
 }
+
 function setupControls() {
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
         marker: false
     });
+
+    geocoder.on('result', function(e) {
+        const searchCoordinates = e.result.geometry.coordinates;
+        // Find the nearest feature
+        map.once('idle', () => {
+            const features = map.queryRenderedFeatures({layers: ['merged-data-points-7n4pjn']});
+            let nearestFeature = null;
+            let nearestDistance = Infinity;
+            features.forEach(feature => {
+                const distance = calculateDistance(searchCoordinates, feature.geometry.coordinates);
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearestFeature = feature;
+                }
+            });
+            if (nearestFeature) {
+                map.flyTo({
+                    center: nearestFeature.geometry.coordinates,
+                    zoom: 15 // Adjust zoom level as needed
+                });
+            }
+        });
+    });
+
     const controlsContainer = document.createElement('div');
     controlsContainer.id = 'controls-container';
     document.getElementById('map').appendChild(controlsContainer);
     controlsContainer.appendChild(geocoder.onAdd(map));
+
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
     resetButton.id = 'reset-button';
@@ -77,6 +109,7 @@ function setupControls() {
     });
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
 }
+
 function enableMapInteractions() {
     map.boxZoom.enable();
     map.scrollZoom.enable();
@@ -85,5 +118,20 @@ function enableMapInteractions() {
     map.keyboard.enable();
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
-    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
+    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // Re-enable interactive map style
+}
+
+function calculateDistance(from, to) {
+    // Placeholder for Haversine formula implementation
+    const [lon1, lat1] = from;
+    const [lon2, lat2] = to;
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
 }
