@@ -44,6 +44,20 @@ function initMap() {
 
     map.on('load', function() {
         setupControls();
+        
+        // Add click event for pins, ensuring map and layers are fully loaded
+        map.on('click', 'merged-data-points-7n4pjn', function(e) {
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            
+            var properties = e.features[0].properties;
+            if (!properties) return; // Check if properties exist
+            
+            var description = `<h4>${properties.NAME}</h4><p>Location Count: ${properties.location_count}<br>Contractor Count: ${properties.contractor_count}<br>Message Count: ${properties.message_count}</p>`;
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
     });
 }
 
@@ -59,13 +73,11 @@ function setupControls() {
         findNearestFeature(searchCoordinates);
     });
 
-    const controlsContainer = document.getElementById('map').appendChild(document.createElement('div'));
-    controlsContainer.className = 'controls-container';
-    controlsContainer.appendChild(geocoder.onAdd(map));
+    document.getElementById('controls-container').appendChild(geocoder.onAdd(map));
 
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
-    resetButton.className = 'reset-button';
+    resetButton.id = 'reset-button';
     resetButton.addEventListener('click', function() {
         map.flyTo({
             center: [-95.7129, 37.0902],
@@ -76,7 +88,7 @@ function setupControls() {
         });
     });
 
-    controlsContainer.appendChild(resetButton);
+    document.getElementById('controls-container').appendChild(resetButton);
 }
 
 function findNearestFeature(searchCoordinates) {
