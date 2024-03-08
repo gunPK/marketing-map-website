@@ -33,10 +33,10 @@ function hideModal() {
 }
 
 function initMap() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
+    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
     window.map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3',
+        style: 'mapbox://styles/YOUR_STYLE_ID',
         center: [-95.7129, 37.0902],
         zoom: 3,
         interactive: false
@@ -45,10 +45,9 @@ function initMap() {
     map.on('load', function() {
         setupControls();
         
-        // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
-        map.on('click', 'merged-data-points-7n4pjn', function(e) { 
+        // Add the click event for the pins
+        map.on('click', 'YOUR_LAYER_ID', function(e) { 
             var coordinates = e.features[0].geometry.coordinates.slice();
-            
             var properties = e.features[0].properties;
             if (!properties) return; // Check if properties exist
             
@@ -69,80 +68,12 @@ function setupControls() {
         marker: false
     });
 
-    // ADJUST ZOOM LEVEL ON SEARCH RESULT
-    // geocoder.on('result', function(e) {
-    //     // Extract coordinates from the geocoder result
-    //     const coordinates = e.result.center;
-    //     // Fly to the coordinates with a custom zoom level
-    //     map.flyTo({
-    //         center: coordinates,
-    //         zoom: 10,
-    //         essential: true
-    //     });
-    // });
-
-    // BRING TO NEAREST PLOTTED POINT ON SEARCH
-    // Modify the geocoder event listener to handle search results
     geocoder.on('result', function(result) {
-        // Extract the coordinates of the search result
         const searchCoordinates = result.result.geometry.coordinates;
-    
-        // Query the rendered features from the specified layer
-        const renderedFeatures = map.queryRenderedFeatures('merged-data-points-7n4pjn');
-    
-        // Find the nearest feature to the search result
-        let nearestFeature;
-        let nearestDistance = Infinity;
-        renderedFeatures.forEach(feature => {
-            const featureCoordinates = feature.geometry.coordinates;
-            // Calculate the distance between the search result and the feature
-            const distance = calculateDistance(searchCoordinates, featureCoordinates);
-            // Update nearest feature if closer
-            if (distance < nearestDistance) {
-                nearestDistance = distance;
-                nearestFeature = feature;
-            }
-        });
-    
-        // Fly to the nearest feature if found
-        if (nearestFeature) {
-            map.flyTo({
-                center: nearestFeature.geometry.coordinates,
-                zoom: 15 // Adjust the zoom level as needed
-            });
-        }
+        findNearestFeature(searchCoordinates, 'YOUR_LAYER_ID');
     });
 
-// Function to calculate distance between two points
-function calculateDistance(point1, point2) {
-    // Convert degrees to radians
-    const lat1 = toRadians(point1[1]);
-    const lon1 = toRadians(point1[0]);
-    const lat2 = toRadians(point2[1]);
-    const lon2 = toRadians(point2[0]);
-
-    // Haversine formula to calculate distance
-    const dlon = lon2 - lon1;
-    const dlat = lat2 - lat1;
-    const a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const R = 6371; // Radius of the Earth in kilometers
-    return R * c;
-}
-
-// Function to convert degrees to radians
-function toRadians(degrees) {
-    return degrees * Math.PI / 180;
-}
-
-
-
-
-    const controlsContainer = document.createElement('div');
-    controlsContainer.id = 'controls-container';
-    document.getElementById('map').appendChild(controlsContainer);
-
-    controlsContainer.appendChild(geocoder.onAdd(map));
+    document.getElementById('map').appendChild(geocoder.onAdd(map));
 
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
@@ -157,7 +88,47 @@ function toRadians(degrees) {
         });
     });
 
-    controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
+    document.getElementById('controls-container').appendChild(resetButton);
+}
+
+function findNearestFeature(searchCoordinates, layerId) {
+    let nearestFeature = null;
+    let nearestDistance = Infinity;
+
+    const features = map.queryRenderedFeatures({layers: [layerId]});
+    features.forEach(feature => {
+        const featureCoordinates = feature.geometry.coordinates;
+        const distance = calculateDistance(searchCoordinates, featureCoordinates);
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestFeature = feature;
+        }
+    });
+
+    if (nearestFeature) {
+        map.flyTo({
+            center: nearestFeature.geometry.coordinates,
+            zoom: 15 // Adjust zoom level as needed
+        });
+    }
+}
+
+function calculateDistance(point1, point2) {
+    const lat1 = toRadians(point1[1]);
+    const lon1 = toRadians(point1[0]);
+    const lat2 = toRadians(point2[1]);
+    const lon2 = toRadians(point2[0]);
+
+    const dlon = lon2 - lon1;
+    const dlat = lat2 - lat1;
+    const a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const R = 6371; // Radius of the Earth in kilometers
+    return R * c;
+}
+
+function toRadians(degrees) {
+    return degrees * Math.PI / 180;
 }
 
 function enableMapInteractions() {
@@ -168,5 +139,5 @@ function enableMapInteractions() {
     map.keyboard.enable();
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
-    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
+    map.setStyle('mapbox://styles/YOUR_STYLE_ID'); // This makes the map interactive
 }
