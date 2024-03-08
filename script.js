@@ -46,7 +46,7 @@ function initMap() {
         setupControls();
         
         // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
-        map.on('click', 'merged-data-points-7n4pjn', function(e) { // Replace 'YOUR_LAYER_ID' with your actual layer ID
+        map.on('click', 'merged-data-points-7n4pjn', function(e) { 
             var coordinates = e.features[0].geometry.coordinates.slice();
             
             var properties = e.features[0].properties;
@@ -67,6 +67,17 @@ function setupControls() {
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
         marker: false
+    });
+
+    geocoder.on('result', function(e) {
+        // Extract coordinates from the geocoder result
+        const coordinates = e.result.center;
+        // Fly to the coordinates with a custom zoom level
+        map.flyTo({
+            center: coordinates,
+            zoom: 10,
+            essential: true
+        });
     });
 
     const controlsContainer = document.createElement('div');
