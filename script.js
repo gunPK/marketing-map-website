@@ -82,32 +82,37 @@ function setupControls() {
     // });
 
     // BRING TO NEAREST PLOTTED POINT ON SEARCH
-    geocoder.on('result', function(e) {
-        // Extract coordinates from the geocoder result
-        const coordinates = e.result.center;
+    // Modify the geocoder event listener to handle search results
+    geocoder.on('result', function(result) {
+        // Extract the coordinates of the search result
+        const coordinates = result.result.geometry.coordinates;
     
-        // Query the rendered features to find the nearest one to the searched location
-        const nearestFeature = map.queryRenderedFeatures(coordinates, { layers: ['merged-data-points-7n4pjn'] })[0];
+        // Query the rendered features from the specified layer
+        const renderedFeatures = map.queryRenderedFeatures('merged-data-points-7n4pjn');
     
+        // Find the nearest feature to the search result
+        let nearestFeature;
+        let nearestDistance = Infinity;
+        renderedFeatures.forEach(feature => {
+            const distance = mapboxgl.MercatorCoordinate.distance(
+                { x: coordinates[0], y: coordinates[1] },
+                { x: feature.geometry.coordinates[0], y: feature.geometry.coordinates[1] }
+            );
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestFeature = feature;
+            }
+        });
+    
+        // Fly to the nearest feature if found
         if (nearestFeature) {
-            // Extract coordinates of the nearest feature
-            const nearestCoordinates = nearestFeature.geometry.coordinates;
-    
-            // Fly to the coordinates of the nearest feature with a custom zoom level
             map.flyTo({
-                center: nearestCoordinates,
-                zoom: 10, // Adjust the zoom level as desired
-                essential: true
-            });
-        } else {
-            // If no nearest feature is found, simply fly to the searched coordinates
-            map.flyTo({
-                center: coordinates,
-                zoom: 10, // Adjust the zoom level as desired
-                essential: true
+                center: nearestFeature.geometry.coordinates,
+                zoom: 15 // Adjust the zoom level as needed
             });
         }
     });
+
 
 
     const controlsContainer = document.createElement('div');
