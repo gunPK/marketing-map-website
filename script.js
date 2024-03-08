@@ -24,12 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function showModal() {
     const modalOverlay = document.getElementById('modalOverlay');
-    modalOverlay.classList.add('show'); // Use CSS transitions for smooth appearance
+    modalOverlay.classList.add('show');
 }
 
 function hideModal() {
     const modalOverlay = document.getElementById('modalOverlay');
-    modalOverlay.classList.remove('show'); // Use CSS transitions for smooth disappearance
+    modalOverlay.classList.remove('show');
 }
 
 function initMap() {
@@ -63,19 +63,18 @@ function setupControls() {
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-        marker: false
+        marker: false,
+        container: 'geocoder-container' // Ensure this container exists in your HTML
     });
 
     geocoder.on('result', function(e) {
         const searchCoordinates = e.result.geometry.coordinates;
         map.once('moveend', () => {
-            const center = map.getCenter().toArray();
-            findNearestFeature(center);
+            findNearestFeature(searchCoordinates); // Changed to use searchCoordinates directly
         });
     });
 
-    document.getElementById('controls-container').appendChild(geocoder.onAdd(map));
-
+    // Reset button
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
     resetButton.id = 'reset-button';
@@ -88,15 +87,27 @@ function setupControls() {
             essential: true
         });
     });
-    document.getElementById('controls-container').appendChild(resetButton);
+    document.getElementById('controls-container').appendChild(resetButton); // Ensure 'controls-container' exists
 }
 
-function findNearestFeature(center) {
+function enableMapInteractions() {
+    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This re-enables the interactive style
+    map.boxZoom.enable();
+    map.scrollZoom.enable();
+    map.dragRotate.enable();
+    map.dragPan.enable();
+    map.keyboard.enable();
+    map.doubleClickZoom.enable();
+    map.touchZoomRotate.enable();
+    map.setInteractive(true);
+}
+
+function findNearestFeature(searchCoordinates) {
     const features = map.queryRenderedFeatures({layers: ['merged-data-points-7n4pjn']});
     let nearestFeature = null;
     let nearestDistance = Infinity;
     features.forEach(feature => {
-        const distance = calculateDistance(center, feature.geometry.coordinates);
+        const distance = calculateDistance(searchCoordinates, feature.geometry.coordinates);
         if (distance < nearestDistance) {
             nearestDistance = distance;
             nearestFeature = feature;
@@ -106,23 +117,13 @@ function findNearestFeature(center) {
     if (nearestFeature) {
         map.flyTo({
             center: nearestFeature.geometry.coordinates,
-            zoom: 15 // Adjust zoom level as needed
+            zoom: 15 // Adjust as needed
         });
     }
 }
 
-function enableMapInteractions() {
-    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
-    map.boxZoom.enable();
-    map.scrollZoom.enable();
-    map.dragRotate.enable();
-    map.dragPan.enable();
-    map.keyboard.enable();
-    map.doubleClickZoom.enable();
-    map.touchZoomRotate.enable();
-}
-
 function calculateDistance(from, to) {
+    // Haversine formula to calculate distance between two points
     const [lon1, lat1] = from;
     const [lon2, lat2] = to;
     const R = 6371; // Earth's radius in kilometers
