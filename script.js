@@ -33,10 +33,10 @@ function hideModal() {
 }
 
 function initMap() {
-    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
     window.map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/YOUR_STYLE_ID',
+        style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3',
         center: [-95.7129, 37.0902],
         zoom: 3,
         interactive: false
@@ -44,20 +44,6 @@ function initMap() {
 
     map.on('load', function() {
         setupControls();
-        
-        // Add the click event for the pins
-        map.on('click', 'YOUR_LAYER_ID', function(e) { 
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            var properties = e.features[0].properties;
-            if (!properties) return; // Check if properties exist
-            
-            var description = `<h4>${properties.NAME}</h4><p>Location Count: ${properties.location_count}<br>Contractor Count: ${properties.contractor_count}<br>Message Count: ${properties.message_count}</p>`; // Customize based on your data properties
-
-            new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description)
-                .addTo(map);
-        });
     });
 }
 
@@ -70,14 +56,16 @@ function setupControls() {
 
     geocoder.on('result', function(result) {
         const searchCoordinates = result.result.geometry.coordinates;
-        findNearestFeature(searchCoordinates, 'YOUR_LAYER_ID');
+        findNearestFeature(searchCoordinates);
     });
 
-    document.getElementById('map').appendChild(geocoder.onAdd(map));
+    const controlsContainer = document.getElementById('map').appendChild(document.createElement('div'));
+    controlsContainer.className = 'controls-container';
+    controlsContainer.appendChild(geocoder.onAdd(map));
 
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
-    resetButton.id = 'reset-button';
+    resetButton.className = 'reset-button';
     resetButton.addEventListener('click', function() {
         map.flyTo({
             center: [-95.7129, 37.0902],
@@ -88,29 +76,31 @@ function setupControls() {
         });
     });
 
-    document.getElementById('controls-container').appendChild(resetButton);
+    controlsContainer.appendChild(resetButton);
 }
 
-function findNearestFeature(searchCoordinates, layerId) {
-    let nearestFeature = null;
-    let nearestDistance = Infinity;
+function findNearestFeature(searchCoordinates) {
+    map.once('idle', () => {
+        const features = map.queryRenderedFeatures({layers: ['merged-data-points-7n4pjn']});
+        let nearestFeature = null;
+        let nearestDistance = Infinity;
 
-    const features = map.queryRenderedFeatures({layers: [layerId]});
-    features.forEach(feature => {
-        const featureCoordinates = feature.geometry.coordinates;
-        const distance = calculateDistance(searchCoordinates, featureCoordinates);
-        if (distance < nearestDistance) {
-            nearestDistance = distance;
-            nearestFeature = feature;
+        features.forEach(feature => {
+            const featureCoordinates = feature.geometry.coordinates;
+            const distance = calculateDistance(searchCoordinates, featureCoordinates);
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestFeature = feature;
+            }
+        });
+
+        if (nearestFeature) {
+            map.flyTo({
+                center: nearestFeature.geometry.coordinates,
+                zoom: 15 // Adjust zoom level as needed
+            });
         }
     });
-
-    if (nearestFeature) {
-        map.flyTo({
-            center: nearestFeature.geometry.coordinates,
-            zoom: 15 // Adjust zoom level as needed
-        });
-    }
 }
 
 function calculateDistance(point1, point2) {
@@ -118,7 +108,6 @@ function calculateDistance(point1, point2) {
     const lon1 = toRadians(point1[0]);
     const lat2 = toRadians(point2[1]);
     const lon2 = toRadians(point2[0]);
-
     const dlon = lon2 - lon1;
     const dlat = lat2 - lat1;
     const a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
@@ -139,5 +128,5 @@ function enableMapInteractions() {
     map.keyboard.enable();
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
-    map.setStyle('mapbox://styles/YOUR_STYLE_ID'); // This makes the map interactive
+    map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
 }
