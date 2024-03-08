@@ -85,7 +85,7 @@ function setupControls() {
     // Modify the geocoder event listener to handle search results
     geocoder.on('result', function(result) {
         // Extract the coordinates of the search result
-        const coordinates = result.result.geometry.coordinates;
+        const searchCoordinates = result.result.geometry.coordinates;
     
         // Query the rendered features from the specified layer
         const renderedFeatures = map.queryRenderedFeatures('merged-data-points-7n4pjn');
@@ -94,10 +94,10 @@ function setupControls() {
         let nearestFeature;
         let nearestDistance = Infinity;
         renderedFeatures.forEach(feature => {
-            const distance = mapboxgl.MercatorCoordinate.distance(
-                { x: coordinates[0], y: coordinates[1] },
-                { x: feature.geometry.coordinates[0], y: feature.geometry.coordinates[1] }
-            );
+            const featureCoordinates = feature.geometry.coordinates;
+            // Calculate the distance between the search result and the feature
+            const distance = calculateDistance(searchCoordinates, featureCoordinates);
+            // Update nearest feature if closer
             if (distance < nearestDistance) {
                 nearestDistance = distance;
                 nearestFeature = feature;
@@ -112,6 +112,29 @@ function setupControls() {
             });
         }
     });
+
+// Function to calculate distance between two points
+function calculateDistance(point1, point2) {
+    // Convert degrees to radians
+    const lat1 = toRadians(point1[1]);
+    const lon1 = toRadians(point1[0]);
+    const lat2 = toRadians(point2[1]);
+    const lon2 = toRadians(point2[0]);
+
+    // Haversine formula to calculate distance
+    const dlon = lon2 - lon1;
+    const dlat = lat2 - lat1;
+    const a = Math.pow(Math.sin(dlat / 2), 2) + Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const R = 6371; // Radius of the Earth in kilometers
+    return R * c;
+}
+
+// Function to convert degrees to radians
+function toRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
 
 
 
