@@ -169,7 +169,7 @@ function openNearestPinPopup(longitude, latitude) {
 
     if (nearestFeature) {
         const coordinates = nearestFeature.geometry.coordinates;
-        const description = nearestFeature.properties.description; // Assuming pin data contains a description
+        const description = nearestFeature.properties.description || 'No description available';
 
         new mapboxgl.Popup()
             .setLngLat(coordinates)
@@ -180,6 +180,7 @@ function openNearestPinPopup(longitude, latitude) {
         console.error('No nearest feature found.');
     }
 }
+
 
 
 
