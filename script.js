@@ -61,11 +61,11 @@ function initMap() {
         if (!properties) return; // Check if properties exist
 
         var description = `<h4>${properties.address}</h4>`;
-        if (properties['Prokeep Locations']) { 
-            description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
-        }
+        // if (properties['Prokeep Locations']) { 
+        //     description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
+        // }
         if (properties['Contractors Using Prokeep']) { 
-            description += `Contractors Using Prokeep: ${properties['Contractors Using Prokeep']}<br>`;
+            description += `Contractors: ${properties['Contractors Using Prokeep']}<br>`;
         }
         // if (properties['Messages Exchanged']) {
         //     description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
