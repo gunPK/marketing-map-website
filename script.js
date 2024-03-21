@@ -167,3 +167,4 @@ function openNearestPinPopup(longitude, latitude) {
         .setHTML(description)
         .addTo(map);
 }
+
