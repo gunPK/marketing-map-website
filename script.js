@@ -130,9 +130,48 @@ function geocodeAndZoom(city, state) {
                     center: [longitude, latitude],
                     zoom: 12 // Adjust the zoom level as necessary
                 });
+                openNearestPinPopup(longitude, latitude);
             } else {
                 console.error('Location not found.');
             }
         })
         .catch(error => console.log('Error:', error));
 }
+
+function openNearestPinPopup(longitude, latitude) {
+    const features = map.queryRenderedFeatures({
+        layers: ['prokeep-contractors-msa-map-4djxdr'],
+        filter: ['==', '$type', 'Point'] // Filter only Point features
+    });
+
+    if (!features.length) {
+        console.log('No features found.');
+        return;
+    }
+
+    let nearestFeature = null;
+    let nearestDistance = Infinity;
+
+    // Calculate distance from each feature to the given location
+    features.forEach(feature => {
+        const coords = feature.geometry.coordinates;
+        const distance = mapboxgl.MercatorCoordinate.fromLngLat({ lon: longitude, lat: latitude })
+            .distanceTo(mapboxgl.MercatorCoordinate.fromLngLat({ lon: coords[0], lat: coords[1] }));
+
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestFeature = feature;
+        }
+    });
+
+    if (nearestFeature) {
+        const coordinates = nearestFeature.geometry.coordinates;
+        const description = nearestFeature.properties.description; // Assuming pin data contains a description
+
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
+    }
+}
+
