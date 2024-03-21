@@ -3,20 +3,33 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initially display the modal overlay
     showModal();
+    
     // Form submission event listener
     document.getElementById('accessForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission behavior
+        
+        // Retrieve the value of each form field
+        const city = document.getElementById('city').value;
+        const state = document.getElementById('state').value;
         const postalCode = document.getElementById('postalCode').value;
+        const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
         const companyName = document.getElementById('companyName').value;
-        console.log('Postal Code:', postalCode, 'Email:', email, 'Company Name:', companyName);
+        
+        // Example: Log the values to the console (you might replace this with your actual use case)
+        console.log('City:', city, 'State:', state, 'Postal Code:', postalCode, 
+                    'Name:', name, 'Email:', email, 'Phone:', phone, 'Company Name:', companyName);
+        
         // Hide the modal overlay upon form submission and enable map interactions
         hideModal();
         enableMapInteractions();
     });
+    
     // Initialize the map in a non-interactive state
     initMap();
 });
+
 function showModal() {
     const modalOverlay = document.getElementById('modalOverlay');
     modalOverlay.classList.add('show'); // Use CSS transitions for smooth appearance
