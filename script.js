@@ -65,7 +65,7 @@ function initMap() {
         //     description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
         // }
         if (properties['Contractors Using Prokeep']) { 
-            description += `Contractors: ${properties['Contractors Using Prokeep']}<br>`;
+            description += `Contractors In Area: ${properties['Contractors Using Prokeep']}<br>`;
         }
         // if (properties['Messages Exchanged']) {
         //     description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
