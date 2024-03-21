@@ -141,48 +141,29 @@ function geocodeAndZoom(city, state) {
 }
 
 function openNearestPinPopup(longitude, latitude) {
-    const features = map.queryRenderedFeatures({
-        layers: ['prokeep-contractors-msa-map-4djxdr'],
-        filter: ['==', '$type', 'Point'] // Filter only Point features
-    });
+    const nearestFeatures = map.queryRenderedFeatures([
+        [longitude - 0.1, latitude - 0.1],
+        [longitude + 0.1, latitude + 0.1]
+    ], { layers: ['prokeep-contractors-msa-map-4djxdr'] });
 
-    if (!features.length) {
-        console.log('No features found.');
+    if (!nearestFeatures.length) {
+        console.log('No nearest features found.');
         return;
     }
 
-    let nearestFeature = null;
-    let nearestDistance = Infinity;
-
-    const point = new mapboxgl.LngLat(longitude, latitude);
-
-    // Calculate distance from each feature to the given location
-    features.forEach(feature => {
-        const coords = feature.geometry.coordinates;
-        if (coords && coords.length === 2) {
-            const distance = point.distanceTo(new mapboxgl.LngLat(coords[0], coords[1]));
-            if (distance < nearestDistance) {
-                nearestDistance = distance;
-                nearestFeature = feature;
-            }
-        } else {
-            console.warn('Invalid coordinates for feature:', feature);
-        }
+    // Sort the features by distance from the given point
+    nearestFeatures.sort((a, b) => {
+        const distA = turf.distance(turf.point([longitude, latitude]), turf.point(a.geometry.coordinates));
+        const distB = turf.distance(turf.point([longitude, latitude]), turf.point(b.geometry.coordinates));
+        return distA - distB;
     });
 
-    if (nearestFeature) {
-        const coordinates = nearestFeature.geometry.coordinates;
-        const description = nearestFeature.properties.description || 'No description available';
+    const nearestFeature = nearestFeatures[0];
+    const coordinates = nearestFeature.geometry.coordinates;
+    const description = nearestFeature.properties.description || 'No description available';
 
-        new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML(description)
-            .addTo(map);
-    } else {
-        console.error('No nearest feature found.');
-    }
+    new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(description)
+        .addTo(map);
 }
-
-
-
-
