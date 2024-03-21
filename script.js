@@ -154,12 +154,12 @@ function openNearestPinPopup(longitude, latitude) {
     let nearestFeature = null;
     let nearestDistance = Infinity;
 
-    const point = mapboxgl.MercatorCoordinate.fromLngLat({ lng: longitude, lat: latitude });
+    const point = new mapboxgl.LngLat(longitude, latitude);
 
     // Calculate distance from each feature to the given location
     features.forEach(feature => {
         const coords = feature.geometry.coordinates;
-        const distance = point.distance(mapboxgl.MercatorCoordinate.fromLngLat({ lng: coords[0], lat: coords[1] }));
+        const distance = point.distanceTo(new mapboxgl.LngLat(coords[0], coords[1]));
 
         if (distance < nearestDistance) {
             nearestDistance = distance;
@@ -180,5 +180,6 @@ function openNearestPinPopup(longitude, latitude) {
         console.error('No nearest feature found.');
     }
 }
+
 
 
