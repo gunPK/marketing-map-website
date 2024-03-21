@@ -135,7 +135,9 @@ function geocodeAndZoom(city, state) {
                 console.error('Location not found.');
             }
         })
-        .catch(error => console.log('Error:', error));
+        .catch(error => {
+            console.error('Error fetching coordinates:', error);
+        });
 }
 
 function openNearestPinPopup(longitude, latitude) {
@@ -172,6 +174,9 @@ function openNearestPinPopup(longitude, latitude) {
             .setLngLat(coordinates)
             .setHTML(description)
             .addTo(map);
+    }
+    else {
+        console.error('No nearest feature found.');
     }
 }
 
