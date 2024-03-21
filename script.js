@@ -44,27 +44,23 @@ function initMap() {
         var properties = e.features[0].properties;
         if (!properties) return; // Check if properties exist
 
-        // Adjusted property names to match those in the updated GeoJSON
-        var description = `<h4>${properties.Name}</h4>`; // Use 'Name' for the popup title, which now corresponds to the former 'address' field
-        if (properties['Prokeep Locations']) { // Check if the property exists before using it
+        var description = `<h4>${properties.address}</h4>`;
+        if (properties['Prokeep Locations']) { 
             description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
         }
-        if (properties['Contractors Using Prokeep']) { // Check if the property exists before using it
+        if (properties['Contractors Using Prokeep']) { 
             description += `Contractors Using Prokeep: ${properties['Contractors Using Prokeep']}<br>`;
         }
-        if (properties['Messages Exchanged']) { // Check if the property exists before using it
-            description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
-        }
-        
-        // Assuming 'Prokeep Locations', 'Contractors Using Prokeep', and 'Messages Exchanged' are the keys you've used in your GeoJSON properties
-        // If different, adjust the keys accordingly to match your GeoJSON structure
+        // if (properties['Messages Exchanged']) {
+        //     description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
+        // }
 
         new mapboxgl.Popup()
             .setLngLat(coordinates)
             .setHTML(description)
             .addTo(map);
+        });
     });
-});
 
 }
 function setupControls() {
