@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hide the modal overlay upon form submission and enable map interactions
         hideModal();
         enableMapInteractions();
+
+        // Geocode the city/state and navigate to the area
+        geocodeAndZoom(city, state);
     });
     
     // Initialize the map in a non-interactive state
@@ -109,4 +112,28 @@ function enableMapInteractions() {
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
     map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
+}
+
+// Function to geocode city/state and navigate to the area
+function geocodeAndZoom(city, state) {
+    const accessToken = mapboxgl.accessToken; // Ensure your access token is set correctly
+    const query = `${city}, ${state}`;
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${accessToken}&limit=1`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.features.length > 0) {
+                const [longitude, latitude] = data.features[0].geometry.coordinates;
+                map.flyTo({
+                    center: [longitude, latitude],
+                    zoom: 12 // Adjust the zoom level as necessary
+                });
+                // Placeholder for opening the nearest pin's popup
+                // openNearestPinPopup(longitude, latitude);
+            } else {
+                console.error('Location not found.');
+            }
+        })
+        .catch(error => console.log('Error:', error));
 }
