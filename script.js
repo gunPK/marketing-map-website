@@ -35,23 +35,37 @@ function initMap() {
         interactive: false
     });
     map.on('load', function() {
-        setupControls();
+    setupControls();
+    
+    // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
+    map.on('click', 'prokeep-contractors-msa-map-4djxdr', function(e) { // Replace 'prokeep-contractors-msa-map-4djxdr' with your actual layer ID
+        var coordinates = e.features[0].geometry.coordinates.slice();
         
-        // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
-        map.on('click', 'prokeep-contractors-msa-map-4djxdr', function(e) { // Replace 'YOUR_LAYER_ID' with your actual layer ID
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            
-            var properties = e.features[0].properties;
-            if (!properties) return; // Check if properties exist
+        var properties = e.features[0].properties;
+        if (!properties) return; // Check if properties exist
 
-            var description = `<h4>${properties.NAME}</h4><p>Location Count: ${properties.location_count}<br>Contractor Count: ${properties.contractor_count}<br>Message Count: ${properties.message_count}</p>`; // Customize based on your data properties
+        // Adjusted property names to match those in the updated GeoJSON
+        var description = `<h4>${properties.Name}</h4>`; // Use 'Name' for the popup title, which now corresponds to the former 'address' field
+        if (properties['Prokeep Locations']) { // Check if the property exists before using it
+            description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
+        }
+        if (properties['Contractors Using Prokeep']) { // Check if the property exists before using it
+            description += `Contractors Using Prokeep: ${properties['Contractors Using Prokeep']}<br>`;
+        }
+        if (properties['Messages Exchanged']) { // Check if the property exists before using it
+            description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
+        }
+        
+        // Assuming 'Prokeep Locations', 'Contractors Using Prokeep', and 'Messages Exchanged' are the keys you've used in your GeoJSON properties
+        // If different, adjust the keys accordingly to match your GeoJSON structure
 
-            new mapboxgl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(description)
-                .addTo(map);
-        });
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(description)
+            .addTo(map);
     });
+});
+
 }
 function setupControls() {
     const geocoder = new MapboxGeocoder({
