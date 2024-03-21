@@ -116,9 +116,10 @@ function enableMapInteractions() {
 
 // Function to geocode city/state and navigate to the area
 function geocodeAndZoom(city, state) {
-    const accessToken = mapboxgl.accessToken; // Ensure your access token is set correctly
+    const accessToken = mapboxgl.accessToken; // Ensure your access token is correctly set
     const query = `${city}, ${state}`;
-    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?access_token=${accessToken}&limit=1`;
+    const country = 'US'; // ISO 3166-1 alpha-2 country code for the United States
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?country=${country}&access_token=${accessToken}&limit=1`;
 
     fetch(url)
         .then(response => response.json())
@@ -129,8 +130,6 @@ function geocodeAndZoom(city, state) {
                     center: [longitude, latitude],
                     zoom: 12 // Adjust the zoom level as necessary
                 });
-                // Placeholder for opening the nearest pin's popup
-                // openNearestPinPopup(longitude, latitude);
             } else {
                 console.error('Location not found.');
             }
