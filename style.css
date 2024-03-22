@@ -78,7 +78,7 @@ body, html {
     }
 
     .modal-overlay {
-        padding: 10px; /* Reduced padding on smaller screens for more space */
+        padding: 5px; /* Reduced padding on smaller screens for more space */
     }
 }
 
@@ -108,13 +108,14 @@ body, html {
     border: 1px solid #dee2e6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 600px; /* Adjusted max-width for better fitting */
-    min-width: 280px; /* Ensures a minimum width for smaller screens */
+    max-width: 600px;
+    min-width: 280px;
+    overflow-y: auto; /* Enables vertical scrolling within the modal content */
+    max-height: 80vh; /* Sets the maximum height to 80% of the viewport height */
     transition: transform 0.3s ease-out;
-    overflow: hidden;
     font-family: 'Barlow', sans-serif;
-    /* Removing the translateY(-20px) to prevent the modal from being too close to the top */
 }
+
 
 .modal-content h2 {
     margin-top: 0;
