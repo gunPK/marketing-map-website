@@ -151,36 +151,59 @@ function geocodeAndZoom(city, state) {
         });
 }
 
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    function toRad(x) {
+        return x * Math.PI / 180;
+    }
+
+    var R = 6371; // Earth’s mean radius in kilometers
+    var dLat = toRad(lat2 - lat1);
+    var dLon = toRad(lon2 - lon1);
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d; // returns the distance in kilometer
+}
+
+function findNearestFeature(longitude, latitude, geojsonData) {
+    let nearestFeature = null;
+    let smallestDistance = Infinity;
+
+    geojsonData.features.forEach(feature => {
+        const [featureLon, featureLat] = feature.geometry.coordinates;
+        const distance = calculateDistance(latitude, longitude, featureLat, featureLon);
+
+        if (distance < smallestDistance) {
+            smallestDistance = distance;
+            nearestFeature = feature;
+        }
+    });
+
+    return nearestFeature;
+}
+
 function openNearestPinPopup(longitude, latitude) {
-    // Ensure GeoJSON data is loaded
     if (!myGeoJSON) {
         console.log("GeoJSON data isn't loaded yet.");
         return;
     }
 
-    // Create a point for the input longitude and latitude
-    const inputPoint = turf.point([longitude, latitude]);
-
-    // Find the nearest feature to the input point from the GeoJSON data
-    const nearestFeature = turf.nearestPoint(inputPoint, myGeoJSON);
-
-    // Ensure a nearest feature was found
+    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON);
     if (nearestFeature) {
-        const nearestCoords = nearestFeature.geometry.coordinates;
-        const nearestAddress = nearestFeature.properties['address'] || 'Address not available';
-        
-        // Log nearest feature information to console
-        console.log(`Nearest Feature: Longitude = ${nearestCoords[0]}, Latitude = ${nearestCoords[1]}, Address = ${nearestAddress}`);
+        const coordinates = nearestFeature.geometry.coordinates;
+        const description = nearestFeature.properties.address || 'No address available';
 
-        // Display a popup for the nearest feature
         new mapboxgl.Popup()
-            .setLngLat(nearestCoords)
-            .setHTML(`<strong>Address:</strong> ${nearestAddress}`)
+            .setLngLat(coordinates)
+            .setHTML(`<strong>Address:</strong> ${description}`)
             .addTo(map);
     } else {
         console.log('No nearest feature found.');
     }
 }
+
 
 
 
