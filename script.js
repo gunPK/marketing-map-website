@@ -61,12 +61,19 @@ function generatePopupContent(properties) {
 
 function showModal() {
     const modalOverlay = document.getElementById('modalOverlay');
-    modalOverlay.classList.add('show'); // Use CSS transitions for smooth appearance
+    modalOverlay.style.display = 'flex'; // Make sure the modal is part of the layout
+    setTimeout(() => modalOverlay.style.opacity = 1, 10); // Start the opacity transition slightly after
 }
+
 function hideModal() {
     const modalOverlay = document.getElementById('modalOverlay');
-    modalOverlay.classList.remove('show'); // Use CSS transitions for smooth disappearance
+    modalOverlay.style.opacity = 0; // Start fading out
+    modalOverlay.addEventListener('transitionend', function handleTransitionEnd() {
+        modalOverlay.style.display = 'none'; // Fully hide the modal after the transition
+        modalOverlay.removeEventListener('transitionend', handleTransitionEnd); // Clean up the event listener
+    }, { once: true });
 }
+
 function initMap() {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
     window.map = new mapboxgl.Map({
