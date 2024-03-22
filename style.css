@@ -231,3 +231,11 @@ body, html {
     font-size: 14px; /* Description font size */
 }
 
+/* CSS for the popup logo */
+.popup-logo {
+    width: 100px; /* Adjust the width of the logo as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 10px; /* Optional margin below the logo */
+}
+
+
