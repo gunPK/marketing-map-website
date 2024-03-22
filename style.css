@@ -161,3 +161,13 @@ body, html {
     margin: 0 auto;
 }
 
+.form-row {
+  display: flex;
+  gap: 10px; /* Adjust space between form groups */
+}
+
+.form-group {
+  flex: 1; /* Allows each form group to expand and fill the available space */
+}
+
+
