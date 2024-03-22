@@ -144,7 +144,7 @@ function enableMapInteractions() {
     map.keyboard.enable();
     map.doubleClickZoom.enable();
     map.touchZoomRotate.enable();
-    // map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3'); // This makes the map interactive
+    // map.setStyle('mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3');
 }
 
 // Function to geocode city/state and navigate to the area
