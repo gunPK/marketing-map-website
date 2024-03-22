@@ -45,16 +45,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function generatePopupContent(properties) {
-    let description = `<h4>${properties.address}</h4>`;
+    let description = `<div class="popup-container">
+                            <h4 class="popup-title">${properties.address}</h4>`;
+    
     // if (properties['Prokeep Locations']) { 
     //     description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
     // }
+    
     if (properties['Contractors Using Prokeep']) { 
-        description += `Contractors In Area: ${properties['Contractors Using Prokeep']}<br>`;
+        description += `<p class="popup-description">Contractors In Area: ${properties['Contractors Using Prokeep']}</p>`;
     }
+    
     // if (properties['Messages Exchanged']) {
     //     description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
     // }
+
+    description += `</div>`;
     
     return description;
 }
