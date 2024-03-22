@@ -44,6 +44,21 @@ document.addEventListener('DOMContentLoaded', function() {
     initMap();
 });
 
+function generatePopupContent(properties) {
+    let description = `<h4>${properties.address}</h4>`;
+    // if (properties['Prokeep Locations']) { 
+    //     description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
+    // }
+    if (properties['Contractors Using Prokeep']) { 
+        description += `Contractors In Area: ${properties['Contractors Using Prokeep']}<br>`;
+    }
+    // if (properties['Messages Exchanged']) {
+    //     description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
+    // }
+    
+    return description;
+}
+
 function showModal() {
     const modalOverlay = document.getElementById('modalOverlay');
     modalOverlay.classList.add('show'); // Use CSS transitions for smooth appearance
@@ -71,16 +86,7 @@ function initMap() {
         var properties = e.features[0].properties;
         if (!properties) return; // Check if properties exist
 
-        var description = `<h4>${properties.address}</h4>`;
-        // if (properties['Prokeep Locations']) { 
-        //     description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
-        // }
-        if (properties['Contractors Using Prokeep']) { 
-            description += `Contractors In Area: ${properties['Contractors Using Prokeep']}<br>`;
-        }
-        // if (properties['Messages Exchanged']) {
-        //     description += `Messages Exchanged: ${properties['Messages Exchanged']}</p>`;
-        // }
+        var description = generatePopupContent(properties);
 
         new mapboxgl.Popup()
             .setLngLat(coordinates)
@@ -191,20 +197,19 @@ function openNearestPinPopup(longitude, latitude) {
     }
 
     const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON);
+    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON); // Assuming this is your implementation
+    
     if (nearestFeature) {
         const coordinates = nearestFeature.geometry.coordinates;
-        const description = nearestFeature.properties.address || 'No address available';
-
+        const properties = nearestFeature.properties;
+        
+        const description = generatePopupContent(properties); // Use the function
+        
         new mapboxgl.Popup()
             .setLngLat(coordinates)
-            .setHTML(`<strong>Address:</strong> ${description}`)
+            .setHTML(description)
             .addTo(map);
     } else {
         console.log('No nearest feature found.');
     }
 }
-
-
-
-
-
