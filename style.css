@@ -56,7 +56,7 @@ body, html {
 
 @media (max-width: 600px) {
     .modal-content {
-        padding: 5px;
+        padding: 10px;
         width: 95%; /* Let the modal take up more screen width on smaller devices */
         max-width: none; /* Removing max-width constraint for small devices */
     }
