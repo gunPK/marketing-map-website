@@ -48,15 +48,6 @@ body, html {
     }
 }
 
-@media (max-width: 600px) {
-    .form-row {
-        flex-direction: column;
-    }
-    .form-group {
-        /* Adjustments for form-group if needed */
-    }
-}
-
 @media (max-width: 768px) {
     .modal-content {
         max-width: 500px; /* Slightly smaller max-width for tablets */
@@ -73,21 +64,28 @@ body, html {
         flex-direction: column; /* Stack form elements vertically on small screens */
     }
 
-    /* Ensure input fields, select boxes, and buttons fill their containers */
+    .form-group {
+        /* If specific adjustments are needed for .form-group on smaller screens, add them here */
+    }
+
     .modal-content input[type="text"],
     .modal-content input[type="email"],
     .modal-content input[type="phone"],
     .modal-content select,
     .modal-content button {
-        width: calc(100% - 24px); /* Adjust width considering padding */
-        margin: 5px 0; /* Add some margin for vertical stacking */
+        width: calc(100% - 24px); /* Adjusts width considering padding, or simply set to 100% if no extra space is needed */
+        margin: 5px 0; /* Adds some margin for vertical stacking */
+    }
+
+    .modal-overlay {
+        padding: 10px; /* Reduced padding on smaller screens for more space */
     }
 }
 
 
 /* Overlay style */
 .modal-overlay {
-    display: none;
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
@@ -96,6 +94,7 @@ body, html {
     background: rgba(0, 0, 0, 0.6);
     justify-content: center;
     align-items: center;
+    padding: 30px; /* Added padding to create space around the modal content */
     z-index: 10;
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -109,12 +108,12 @@ body, html {
     border: 1px solid #dee2e6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 600px;
-    min-width: 280px;
+    max-width: 600px; /* Adjusted max-width for better fitting */
+    min-width: 280px; /* Ensures a minimum width for smaller screens */
     transition: transform 0.3s ease-out;
-    transform: translateY(-20px);
     overflow: hidden;
     font-family: 'Barlow', sans-serif;
+    /* Removing the translateY(-20px) to prevent the modal from being too close to the top */
 }
 
 .modal-content h2 {
