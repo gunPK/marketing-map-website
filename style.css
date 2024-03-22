@@ -210,4 +210,23 @@ body, html {
   flex: 1; /* Allows each form group to expand and fill the available space */
 }
 
+.popup-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 300px;
+}
+
+.popup-title {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.popup-description {
+    color: #666;
+    font-size: 14px;
+}
+
 
