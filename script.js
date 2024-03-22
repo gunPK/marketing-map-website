@@ -196,8 +196,7 @@ function openNearestPinPopup(longitude, latitude) {
         return;
     }
 
-    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON);
-    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON); // Assuming this is your implementation
+    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON); // Removed the duplicated line here
     
     if (nearestFeature) {
         const coordinates = nearestFeature.geometry.coordinates;
@@ -213,3 +212,4 @@ function openNearestPinPopup(longitude, latitude) {
         console.log('No nearest feature found.');
     }
 }
+
