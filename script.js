@@ -102,10 +102,23 @@ function setupControls() {
         mapboxgl: mapboxgl,
         marker: false
     });
+
+    // Listen for the 'result' event on the geocoder to handle search results
+    geocoder.on('result', function(e) {
+        // Extract the location's longitude and latitude from the search result
+        const longitude = e.result.geometry.coordinates[0];
+        const latitude = e.result.geometry.coordinates[1];
+
+        // Use the logic to find the nearest pin and adjust the map view accordingly
+        openNearestPinPopup(longitude, latitude);
+    });
+
     const controlsContainer = document.createElement('div');
     controlsContainer.id = 'controls-container';
     document.getElementById('map').appendChild(controlsContainer);
     controlsContainer.appendChild(geocoder.onAdd(map));
+
+    // Create and configure the 'Reset View' button
     const resetButton = document.createElement('button');
     resetButton.textContent = 'Reset View';
     resetButton.id = 'reset-button';
@@ -118,8 +131,11 @@ function setupControls() {
             essential: true
         });
     });
+
+    // Insert the reset button into the controls container
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
 }
+
 function enableMapInteractions() {
     map.boxZoom.enable();
     map.scrollZoom.enable();
