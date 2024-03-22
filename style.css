@@ -75,14 +75,22 @@ body, html {
     max-width: 400px;
     transition: transform 0.3s ease-out;
     transform: translateY(-20px);
-    overflow: hidden;
+    overflow-y: auto; /* Make content scrollable */
+    scrollbar-width: thin; /* For supporting browsers, make scrollbar less obtrusive */
     font-family: 'Barlow', sans-serif;
+}
+
+.modal-content::-webkit-scrollbar {
+    width: 4px; /* For WebKit browsers, adjust scrollbar width */
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2); /* Adjust scrollbar thumb color */
 }
 
 .modal-content h2 {
     margin-top: 0;
     color: #333;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     text-align: center;
 }
 
@@ -159,4 +167,21 @@ body, html {
     height: auto;
     display: block;
     margin: 0 auto;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 15px; /* Slightly reduce padding */
+        width: 95%; /* Allow modal to take a bit more space */
+        max-width: none; /* Remove max-width restriction for very small screens */
+    }
+
+    .modal-content label, .modal-content input, .modal-content select, .modal-content button {
+        font-size: 14px; /* Adjust font size for better readability on small screens */
+    }
+
+    .logo-container img {
+        width: 80px; /* Slightly reduce the logo size for small screens */
+    }
 }
