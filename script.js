@@ -143,10 +143,9 @@ function geocodeAndZoom(city, state) {
         .then(data => {
             if (data.features.length > 0) {
                 const [longitude, latitude] = data.features[0].geometry.coordinates;
-                map.flyTo({
-                    center: [longitude, latitude],
-                    zoom: 12 // Adjust the zoom level as necessary
-                });
+                
+                // Instead of flying to the coordinates, pass them to openNearestPinPopup
+                // openNearestPinPopup will handle showing the pin and adjusting the map view
                 openNearestPinPopup(longitude, latitude);
             } else {
                 console.error('Location not found.');
@@ -156,6 +155,7 @@ function geocodeAndZoom(city, state) {
             console.error('Error fetching coordinates:', error);
         });
 }
+
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
     function toRad(x) {
@@ -196,20 +196,32 @@ function openNearestPinPopup(longitude, latitude) {
         return;
     }
 
-    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON); // Removed the duplicated line here
+    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON);
     
     if (nearestFeature) {
-        const coordinates = nearestFeature.geometry.coordinates;
-        const properties = nearestFeature.properties;
+        const nearestCoords = nearestFeature.geometry.coordinates;
         
-        const description = generatePopupContent(properties); // Use the function
-        
+        // Create bounds that will include both the searched location and the nearest pin
+        const bounds = new mapboxgl.LngLatBounds();
+        bounds.extend([longitude, latitude]); // Extend bounds to include the searched location
+        bounds.extend(nearestCoords); // Extend bounds to include the nearest pin
+
+        // Adjust the map view with an animation to include both points
+        map.fitBounds(bounds, {
+            padding: {top: 50, bottom:50, left: 50, right: 50}, // Adjust padding as needed
+            maxZoom: 12, // Prevent the map from zooming in too far
+            duration: 1000 // Adjust duration of the animation as needed
+        });
+
+        // After adjusting the view, display the popup for the nearest feature
+        const description = generatePopupContent(nearestFeature.properties);
         new mapboxgl.Popup()
-            .setLngLat(coordinates)
+            .setLngLat(nearestCoords)
             .setHTML(description)
             .addTo(map);
     } else {
         console.log('No nearest feature found.');
     }
 }
+
 
