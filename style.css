@@ -57,6 +57,34 @@ body, html {
     }
 }
 
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 500px; /* Slightly smaller max-width for tablets */
+    }
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        width: 95%; /* Let the modal take up more screen width on smaller devices */
+        max-width: none; /* Removing max-width constraint for small devices */
+    }
+
+    .form-row {
+        flex-direction: column; /* Stack form elements vertically on small screens */
+    }
+
+    /* Ensure input fields, select boxes, and buttons fill their containers */
+    .modal-content input[type="text"],
+    .modal-content input[type="email"],
+    .modal-content input[type="phone"],
+    .modal-content select,
+    .modal-content button {
+        width: calc(100% - 24px); /* Adjust width considering padding */
+        margin: 5px 0; /* Add some margin for vertical stacking */
+    }
+}
+
+
 /* Overlay style */
 .modal-overlay {
     display: none;
@@ -81,7 +109,8 @@ body, html {
     border: 1px solid #dee2e6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 600px; /* Increased from 400px */
+    max-width: 600px;
+    min-width: 280px;
     transition: transform 0.3s ease-out;
     transform: translateY(-20px);
     overflow: hidden;
