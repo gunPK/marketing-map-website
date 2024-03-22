@@ -223,12 +223,14 @@ body, html {
     color: rgb(44, 124, 148); /* Title text color */
     font-size: 14px; /* Title font size */
     margin-bottom: 10px; /* Bottom margin */
+    font-family: 'Barlow', sans-serfif;
 }
 
 /* Styling for the popup description */
 .popup-description {
     color: #666; /* Description text color */
     font-size: 14px; /* Description font size */
+    font-family: 'Barlow', sans-serfif;
 }
 
 /* CSS for the popup logo */
