@@ -1,4 +1,15 @@
+let myGeoJSON;
+
 document.addEventListener('DOMContentLoaded', function() {
+    fetch('Prokeep Contractors MSA Map - Sales.geojson')
+    .then(response => response.json())
+    .then(data => {
+        myGeoJSON = data;
+        console.log('GeoJSON loaded successfully');
+        // Now you can use myGeoJSON in your site
+    })
+    .catch(error => console.error('Error loading GeoJSON:', error));
+    
     const modalOverlay = document.getElementById('modalOverlay');
     
     // Initially display the modal overlay
@@ -141,27 +152,36 @@ function geocodeAndZoom(city, state) {
 }
 
 function openNearestPinPopup(longitude, latitude) {
-    // Print Long and Lat for the auto zoom off form fill
-    console.log('Input Longitude:', longitude, 'Input Latitude:', latitude);
+    // Ensure GeoJSON data is loaded
+    if (!myGeoJSON) {
+        console.log("GeoJSON data isn't loaded yet.");
+        return;
+    }
 
-    const layerId = 'prokeep-contractors-msa-map-4djxdr';
-    
-    // Obtain all rendered features from the specified layer
-    const features = map.queryRenderedFeatures({ layers: [layerId] });
+    // Create a point for the input longitude and latitude
+    const inputPoint = turf.point([longitude, latitude]);
 
-    if (features.length) {
-        console.log(`Found ${features.length} features in layer ${layerId}:`);
+    // Find the nearest feature to the input point from the GeoJSON data
+    const nearestFeature = turf.nearestPoint(inputPoint, myGeoJSON);
+
+    // Ensure a nearest feature was found
+    if (nearestFeature) {
+        const nearestCoords = nearestFeature.geometry.coordinates;
+        const nearestAddress = nearestFeature.properties['address'] || 'Address not available';
         
-        // Loop through each feature and print its coordinates and address
-        features.forEach((feature, index) => {
-            const coords = feature.geometry.coordinates;
-            const address = feature.properties['address'] || 'No address provided'; // Fallback to 'No address provided' if address is undefined
-            console.log(`Feature #${index + 1}: Longitude = ${coords[0]}, Latitude = ${coords[1]}, Address = ${address}`);
-        });
+        // Log nearest feature information to console
+        console.log(`Nearest Feature: Longitude = ${nearestCoords[0]}, Latitude = ${nearestCoords[1]}, Address = ${nearestAddress}`);
+
+        // Display a popup for the nearest feature
+        new mapboxgl.Popup()
+            .setLngLat(nearestCoords)
+            .setHTML(`<strong>Address:</strong> ${nearestAddress}`)
+            .addTo(map);
     } else {
-        console.log(`No features found in layer ${layerId}.`);
+        console.log('No nearest feature found.');
     }
 }
+
 
 
 
