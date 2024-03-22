@@ -141,30 +141,27 @@ function geocodeAndZoom(city, state) {
 }
 
 function openNearestPinPopup(longitude, latitude) {
-    const nearestFeatures = map.queryRenderedFeatures([
-        [longitude - 0.1, latitude - 0.1],
-        [longitude + 0.1, latitude + 0.1]
-    ], { layers: ['prokeep-contractors-msa-map-4djxdr'] });
+    // Print Long and Lat for the auto zoom off form fill
+    console.log('Input Longitude:', longitude, 'Input Latitude:', latitude);
 
-    if (!nearestFeatures.length) {
-        console.log('No nearest features found.');
-        return;
+    const layerId = 'prokeep-contractors-msa-map-4djxdr';
+    
+    // Obtain all rendered features from the specified layer
+    const features = map.queryRenderedFeatures({ layers: [layerId] });
+
+    if (features.length) {
+        console.log(`Found ${features.length} features in layer ${layerId}:`);
+        
+        // Loop through each feature and print its coordinates and address
+        features.forEach((feature, index) => {
+            const coords = feature.geometry.coordinates;
+            const address = feature.properties['address'] || 'No address provided'; // Fallback to 'No address provided' if address is undefined
+            console.log(`Feature #${index + 1}: Longitude = ${coords[0]}, Latitude = ${coords[1]}, Address = ${address}`);
+        });
+    } else {
+        console.log(`No features found in layer ${layerId}.`);
     }
-
-    // Sort the features by distance from the given point
-    nearestFeatures.sort((a, b) => {
-        const distA = turf.distance(turf.point([longitude, latitude]), turf.point(a.geometry.coordinates));
-        const distB = turf.distance(turf.point([longitude, latitude]), turf.point(b.geometry.coordinates));
-        return distA - distB;
-    });
-
-    const nearestFeature = nearestFeatures[0];
-    const coordinates = nearestFeature.geometry.coordinates;
-    const description = nearestFeature.properties.description || 'No description available';
-
-    new mapboxgl.Popup()
-        .setLngLat(coordinates)
-        .setHTML(description)
-        .addTo(map);
 }
+
+
 
