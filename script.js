@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function generatePopupContent(properties) {
 
     const trimmedAddress = properties.address.substring(0, properties.address.length - 5);
-    
+
     let description = `<div class="popup-container">
+                            <img src="prokeep-long-logo.webp" alt="Prokeep Logo" class="popup-logo">
                             <h4 class="popup-title">${trimmedAddress}</h4>`;
     
     // if (properties['Prokeep Locations']) { 
