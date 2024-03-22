@@ -233,9 +233,11 @@ body, html {
 
 /* CSS for the popup logo */
 .popup-logo {
-    width: 100px; /* Adjust the width of the logo as needed */
+    display: block;
+    margin: 0 auto; /* Center the logo horizontally */
+    width: 100%; /* Make the logo span the width of the popup */
+    max-width: 200px; /* Set a maximum width for the logo if needed */
     height: auto; /* Maintain aspect ratio */
-    margin-bottom: 10px; /* Optional margin below the logo */
 }
 
 
