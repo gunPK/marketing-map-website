@@ -45,8 +45,11 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function generatePopupContent(properties) {
+
+    const trimmedAddress = properties.address.substring(0, properties.address.length - 5);
+    
     let description = `<div class="popup-container">
-                            <h4 class="popup-title">${properties.address}</h4>`;
+                            <h4 class="popup-title">${trimmedAddress}</h4>`;
     
     // if (properties['Prokeep Locations']) { 
     //     description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
