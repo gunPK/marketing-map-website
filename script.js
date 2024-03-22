@@ -239,3 +239,4 @@ function openNearestPinPopup(longitude, latitude) {
         console.log('No nearest feature found.');
     }
 }
+
