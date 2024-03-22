@@ -48,6 +48,15 @@ body, html {
     }
 }
 
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column;
+    }
+    .form-group {
+        /* Adjustments for form-group if needed */
+    }
+}
+
 /* Overlay style */
 .modal-overlay {
     display: none;
