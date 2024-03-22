@@ -81,7 +81,7 @@ body, html {
     border: 1px solid #dee2e6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 90%;
-    max-width: 400px;
+    max-width: 600px; /* Increased from 400px */
     transition: transform 0.3s ease-out;
     transform: translateY(-20px);
     overflow: hidden;
