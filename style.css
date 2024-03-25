@@ -30,7 +30,7 @@ body, html {
     background-color: rgb(44, 124, 148); /* Match the background color of the submit button */
     color: white; /* Text color */
     border: none; /* Remove border */
-    padding: 12px 15px; /* Padding */
+    padding: 8px 15px; /* Padding */
     cursor: pointer;
     border-radius: 4px;
     font-size: 16px;
