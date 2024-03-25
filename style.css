@@ -15,16 +15,17 @@ body, html {
     align-items: center;
     position: absolute;
     top: 10px;
-    left: 10%;
-    right: 10%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    margin-left: auto; /* Automatically calculate the left margin */
+    margin-right: auto; /* Automatically calculate the right margin */
     z-index: 2; /* Ensure the container is above the map */
 }
 
 .mapboxgl-ctrl-geocoder {
     flex-shrink: 0;
-    margin: 0 auto;
-    width: 80%;
+    margin: 0 2px;
+    width: 50%;
 }
 
 #reset-button {
