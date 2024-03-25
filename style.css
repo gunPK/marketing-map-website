@@ -27,15 +27,21 @@ body, html {
 }
 
 #reset-button {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 6px 12px;
+    background-color: rgb(44, 124, 148); /* Match the background color of the submit button */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    padding: 12px 15px; /* Padding */
     cursor: pointer;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 16px;
     margin-right: 2px;
     flex-shrink: 0;
     font-family: 'Barlow', sans-serif;
+}
+
+#reset-button:hover {
+    background-color: #0056b3; /* Darker background color on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Add shadow on hover */
 }
 
 @media (max-width: 600px) {
