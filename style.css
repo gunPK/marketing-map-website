@@ -13,12 +13,11 @@ body, html {
 #controls-container {
     display: flex;
     align-items: center;
+    justify-content: center; /* Center the children horizontally */
     position: absolute;
     top: 10px;
     left: 0;
     right: 0;
-    margin-left: auto; /* Automatically calculate the left margin */
-    margin-right: auto; /* Automatically calculate the right margin */
     z-index: 2; /* Ensure the container is above the map */
 }
 
