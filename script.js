@@ -120,15 +120,23 @@ function setupControls() {
         marker: false
     });
 
-    // Get the geocoder input field
-    const geocoderInput = geocoder._inputEl;
+    // Wait for the geocoder control to be added to the DOM
+    geocoder.onAdd(map);
 
-    // Listen for 'input' event on the geocoder input field
-    geocoderInput.addEventListener('input', function(event) {
-        // Retrieve the current value of the input field
-        const searchText = event.target.value;
-        console.log("Text entered in search bar:", searchText);
-    });
+    // Find the geocoder input field in the DOM
+    const geocoderInput = document.querySelector('.mapboxgl-ctrl-geocoder input');
+
+    // Check if the input field exists
+    if (geocoderInput) {
+        // Listen for 'input' event on the geocoder input field
+        geocoderInput.addEventListener('input', function(event) {
+            // Retrieve the current value of the input field
+            const searchText = event.target.value;
+            console.log("Text entered in search bar:", searchText);
+        });
+    } else {
+        console.error("Geocoder input field not found.");
+    }
 
     // Listen for the 'result' event on the geocoder to handle search results
     geocoder.on('result', function(e) {
