@@ -245,8 +245,14 @@ function findNearestFeature(longitude, latitude, geojsonData, city) {
         }
     });
 
+    console.log("Nearest Features:", nearestFeatures); // Add this line for debugging
+    
     // Check if any of the nearest features have the city name in their titles
-    const nearestFeatureWithCity = nearestFeatures.find(feature => feature.properties.address.includes(city));
+    const nearestFeatureWithCity = nearestFeatures.find(feature => {
+        console.log("Feature Properties:", feature.properties); // Add this line for debugging
+        return feature.properties.address && feature.properties.address.includes(city);
+    });
+    
     return nearestFeatureWithCity || nearestFeatures[0]; // Return the nearest feature with the city name if found, otherwise return the nearest feature overall
 }
 
