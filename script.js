@@ -126,6 +126,9 @@ function setupControls() {
         const longitude = e.result.geometry.coordinates[0];
         const latitude = e.result.geometry.coordinates[1];
 
+        const searchText = e.query;
+        console.log("Text Entered in search bar:". searchText);
+
         // Extract the city from the search result context
         const city = extractCityFromContext(e.result.context);
         console.log("City from Geocoder Result:", city); // Add this line for debugging
