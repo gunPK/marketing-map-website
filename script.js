@@ -126,6 +126,8 @@ function setupControls() {
         const longitude = e.result.geometry.coordinates[0];
         const latitude = e.result.geometry.coordinates[1];
 
+        console.log("Result Object:", e.result);
+
         const searchQuery = geocoder.inputString;
         console.log("Search Query:", searchQuery);
 
