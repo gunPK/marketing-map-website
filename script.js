@@ -120,14 +120,21 @@ function setupControls() {
         marker: false
     });
 
+    // Get the geocoder input field
+    const geocoderInput = geocoder._inputEl;
+
+    // Listen for 'input' event on the geocoder input field
+    geocoderInput.addEventListener('input', function(event) {
+        // Retrieve the current value of the input field
+        const searchText = event.target.value;
+        console.log("Text entered in search bar:", searchText);
+    });
+
     // Listen for the 'result' event on the geocoder to handle search results
     geocoder.on('result', function(e) {
         // Extract the location's longitude and latitude from the search result
         const longitude = e.result.geometry.coordinates[0];
         const latitude = e.result.geometry.coordinates[1];
-
-        const searchText = e.query;
-        console.log("Text Entered in search bar:", searchText);
 
         // Extract the city from the search result context
         const city = extractCityFromContext(e.result.context);
