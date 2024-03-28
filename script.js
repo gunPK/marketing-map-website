@@ -206,22 +206,50 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return d; // returns the distance in kilometer
 }
 
-function findNearestFeature(longitude, latitude, geojsonData) {
-    let nearestFeature = null;
-    let smallestDistance = Infinity;
+// function findNearestFeature(longitude, latitude, geojsonData) {
+//     let nearestFeature = null;
+//     let smallestDistance = Infinity;
 
+//     geojsonData.features.forEach(feature => {
+//         const [featureLon, featureLat] = feature.geometry.coordinates;
+//         const distance = calculateDistance(latitude, longitude, featureLat, featureLon);
+
+//         if (distance < smallestDistance) {
+//             smallestDistance = distance;
+//             nearestFeature = feature;
+//         }
+//     });
+
+//     return nearestFeature;
+// }
+
+function findNearestFeature(longitude, latitude, geojsonData, city) {
+    let nearestFeatures = [];
+    let nearestDistances = [];
+    const numNearest = 3; // Number of nearest pins to consider
+    
     geojsonData.features.forEach(feature => {
         const [featureLon, featureLat] = feature.geometry.coordinates;
         const distance = calculateDistance(latitude, longitude, featureLat, featureLon);
 
-        if (distance < smallestDistance) {
-            smallestDistance = distance;
-            nearestFeature = feature;
+        // Keep track of the nearest features and their distances
+        if (nearestFeatures.length < numNearest || distance < nearestDistances[nearestDistances.length - 1]) {
+            let indexToInsert = nearestDistances.findIndex(dist => distance < dist);
+            if (indexToInsert === -1) indexToInsert = nearestDistances.length;
+            nearestFeatures.splice(indexToInsert, 0, feature);
+            nearestDistances.splice(indexToInsert, 0, distance);
+            if (nearestFeatures.length > numNearest) {
+                nearestFeatures.pop();
+                nearestDistances.pop();
+            }
         }
     });
 
-    return nearestFeature;
+    // Check if any of the nearest features have the city name in their titles
+    const nearestFeatureWithCity = nearestFeatures.find(feature => feature.properties.title.includes(city));
+    return nearestFeatureWithCity || nearestFeatures[0]; // Return the nearest feature with the city name if found, otherwise return the nearest feature overall
 }
+
 
 function openNearestPinPopup(longitude, latitude) {
     if (!myGeoJSON) {
