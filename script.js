@@ -127,7 +127,7 @@ function setupControls() {
         const latitude = e.result.geometry.coordinates[1];
 
         const searchText = e.query;
-        console.log("Text Entered in search bar:". searchText);
+        console.log("Text Entered in search bar:", searchText);
 
         // Extract the city from the search result context
         const city = extractCityFromContext(e.result.context);
