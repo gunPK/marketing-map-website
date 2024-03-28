@@ -179,7 +179,7 @@ function geocodeAndZoom(city, state, postalCode) {
                 
                 // Instead of flying to the coordinates, pass them to openNearestPinPopup
                 // openNearestPinPopup will handle showing the pin and adjusting the map view
-                openNearestPinPopup(longitude, latitude);
+                openNearestPinPopup(longitude, latitude, city);
             } else {
                 console.error('Location not found.');
             }
@@ -251,13 +251,13 @@ function findNearestFeature(longitude, latitude, geojsonData, city) {
 }
 
 
-function openNearestPinPopup(longitude, latitude) {
+function openNearestPinPopup(longitude, latitude, city) {
     if (!myGeoJSON) {
         console.log("GeoJSON data isn't loaded yet.");
         return;
     }
 
-    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON);
+    const nearestFeature = findNearestFeature(longitude, latitude, myGeoJSON, city);
     
     if (nearestFeature) {
         const nearestCoords = nearestFeature.geometry.coordinates;
