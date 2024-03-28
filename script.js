@@ -126,8 +126,12 @@ function setupControls() {
         const longitude = e.result.geometry.coordinates[0];
         const latitude = e.result.geometry.coordinates[1];
 
+        // Extract the city from the search result context
+        const city = extractCityFromContext(e.result.context);
+        console.log("City from Geocoder Result:", city); // Add this line for debugging
+
         // Use the logic to find the nearest pin and adjust the map view accordingly
-        openNearestPinPopup(longitude, latitude);
+        openNearestPinPopup(longitude, latitude, city);
     });
 
     const controlsContainer = document.createElement('div');
@@ -151,6 +155,17 @@ function setupControls() {
 
     // Insert the reset button into the controls container
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
+}
+
+// Get the city from the geocoder results (from interactive map search bar)
+function extractCityFromContext(context) {
+    // Iterate over the context to find the city
+    for (const item of context) {
+        if (item.id.includes('place') && item.text) {
+            return item.text;
+        }
+    }
+    return null; // Return null if city not found
 }
 
 function enableMapInteractions() {
