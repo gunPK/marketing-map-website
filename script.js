@@ -126,18 +126,25 @@ function setupControls() {
         const longitude = e.result.geometry.coordinates[0];
         const latitude = e.result.geometry.coordinates[1];
 
-        console.log("Result Object:", e.result);
+        // console.log("Result Object:", e.result);
 
-        const searchQuery = geocoder.inputString;
-        console.log("Search Query:", searchQuery);
+        const searchedCity = e.result.place_name;
+        console.log("Searched City:", searchedCity);
 
         // Extract the city from the search result context
-        const city = extractCityFromContext(e.result.context);
-        console.log("City from Geocoder Result:", city); // Add this line for debugging
+        const city = extractCityFromPlaceName(searchedCity);
+        console.log("City from Geocoder Search:", city); // Add this line for debugging
 
         // Use the logic to find the nearest pin and adjust the map view accordingly
         openNearestPinPopup(longitude, latitude, city);
     });
+
+    function extractCityFromPlaceName(placeName) {
+        // Split the place name string by commas and spaces
+        const parts = placeName.split(/,\s*/);
+        // The city is usually the first part of the place name
+        return parts[0];
+    }
 
     const controlsContainer = document.createElement('div');
     controlsContainer.id = 'controls-container';
@@ -160,19 +167,6 @@ function setupControls() {
 
     // Insert the reset button into the controls container
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
-}
-
-// Get the city from the geocoder results (from interactive map search bar)
-function extractCityFromContext(context) {
-    // Iterate over the context to find the city
-    for (const item of context) {
-        console.log('Item:', item);
-        if (item.id.includes('place') && item.text) {
-            console.log('Found city:', item.text);
-            return item.text;
-        }
-    }
-    return null; // Return null if city not found
 }
 
 function enableMapInteractions() {
