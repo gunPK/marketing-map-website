@@ -161,7 +161,9 @@ function setupControls() {
 function extractCityFromContext(context) {
     // Iterate over the context to find the city
     for (const item of context) {
+        console.log('Item:', item);
         if (item.id.includes('place') && item.text) {
+            console.log('Found city:', item.text);
             return item.text;
         }
     }
@@ -260,11 +262,11 @@ function findNearestFeature(longitude, latitude, geojsonData, city) {
         }
     });
 
-    console.log("Nearest Features:", nearestFeatures); // Add this line for debugging
+    console.log("Nearest Features:", nearestFeatures); 
     
     // Check if any of the nearest features have the city name in their titles
     const nearestFeatureWithCity = nearestFeatures.find(feature => {
-        console.log("Feature Properties:", feature.properties); // Add this line for debugging
+        // console.log("Feature Properties:", feature.properties);
         return feature.properties.address && feature.properties.address.includes(city);
     });
     
