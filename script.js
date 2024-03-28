@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         enableMapInteractions();
 
         // Geocode the city/state and navigate to the area
-        geocodeAndZoom(city, state);
+        geocodeAndZoom(city, state, postalCode);
     });
     
     // Initialize the map in a non-interactive state
@@ -165,9 +165,9 @@ function enableMapInteractions() {
 }
 
 // Function to geocode city/state and navigate to the area
-function geocodeAndZoom(city, state) {
+function geocodeAndZoom(city, state, postalCode) {
     const accessToken = mapboxgl.accessToken; // Ensure your access token is correctly set
-    const query = `${city}, ${state}`;
+    const query = `${city}, ${state} ${postalCode}`;
     const country = 'US'; // ISO 3166-1 alpha-2 country code for the United States
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?country=${country}&access_token=${accessToken}&limit=1`;
 
