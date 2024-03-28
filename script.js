@@ -128,12 +128,12 @@ function setupControls() {
 
         // console.log("Result Object:", e.result);
 
-        const searchedCity = e.result.place_name;
-        console.log("Searched City:", searchedCity);
+        const fullSearch = e.result.place_name;
+        console.log("Full Search Query:", fullSearch);
 
         // Extract the city from the search result context
-        const city = extractCityFromPlaceName(searchedCity);
-        console.log("City from Geocoder Search:", city); // Add this line for debugging
+        const city = extractCityFromPlaceName(fullSearch);
+        console.log("City extracted from Geocoder Search:", city); // Add this line for debugging
 
         // Use the logic to find the nearest pin and adjust the map view accordingly
         openNearestPinPopup(longitude, latitude, city);
