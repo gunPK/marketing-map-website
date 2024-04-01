@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function generatePopupContent(properties) {
 
-    const trimmedAddress = properties.address.substring(0, properties.address.length - 5);
+    const trimmedAddress = properties.Name.substring(0, properties.Name.length - 5);
 
     let description = `<div class="popup-container">
                             <img src="prokeep-long-logo.webp" alt="Prokeep Logo" class="popup-logo">
@@ -266,7 +266,7 @@ function findNearestFeature(longitude, latitude, geojsonData, city) {
     // Check if any of the nearest features have the city name in their titles
     const nearestFeatureWithCity = nearestFeatures.find(feature => {
         // console.log("Feature Properties:", feature.properties);
-        return feature.properties.address && feature.properties.address.includes(city);
+        return feature.properties.Name && feature.properties.Name.includes(city);
     });
     
     return nearestFeatureWithCity || nearestFeatures[0]; // Return the nearest feature with the city name if found, otherwise return the nearest feature overall
