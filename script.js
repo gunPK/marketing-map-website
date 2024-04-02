@@ -57,7 +57,7 @@ function generatePopupContent(properties) {
     // }
     
     if (properties['Contractors Using Prokeep']) { 
-        description += `<p class="popup-description">Contractors Texting in Area: ${properties['Contractors Using Prokeep']}</p>`;
+        description += `<p class="popup-description">Contractors Texting in Area: ${properties['contractor_count']}</p>`;
     }
     
     // if (properties['Messages Exchanged']) {
