@@ -56,7 +56,7 @@ function generatePopupContent(properties) {
     //     description += `<p>Prokeep Locations: ${properties['Prokeep Locations']}<br>`;
     // }
     
-    if (properties['Contractors Using Prokeep']) { 
+    if (properties['contractor_count']) { 
         description += `<p class="popup-description">Contractors Texting in Area: ${properties['contractor_count']}</p>`;
     }
     
