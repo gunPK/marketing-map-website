@@ -1,12 +1,39 @@
 let myGeoJSON;
 
+function sendToHubSpot(formData) {
+    const hubSpotApiKey = 'YOUR_HUBSPOT_API_KEY'; // TEMPORARY !!!!!!!!!!!!!!
+    const endpoint = `https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/${formData.email}/?hapikey=${hubSpotApiKey}`;
+
+    const data = {
+        "properties": [
+            { "property": "email", "value": formData.email },
+            { "property": "full_name", "value": formData.name },
+            { "property": "phone", "value": formData.phone },
+            { "property": "company", "value": formData.companyName },
+            { "property": "city", "value": formData.city },
+            { "property": "state", "value": formData.state },
+            { "property": "zip", "value": formData.postalCode },
+        ]
+    };
+
+    fetch(endpoint, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => console.log('HubSpot API Response:', data))
+    .catch((error) => console.error('Error:', error));
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     fetch('Prokeep Contractors MSA Map - Sales.geojson')
     .then(response => response.json())
     .then(data => {
         myGeoJSON = data;
         console.log('GeoJSON loaded successfully');
-        // Now you can use myGeoJSON in your site
     })
     .catch(error => console.error('Error loading GeoJSON:', error));
     
@@ -17,27 +44,36 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Form submission event listener
     document.getElementById('accessForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission behavior
+        event.preventDefault();
         
-        // Retrieve the value of each form field
-        const city = document.getElementById('city').value;
-        const state = document.getElementById('state').value;
-        const postalCode = document.getElementById('postalCode').value;
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const companyName = document.getElementById('companyName').value;
+        // const city = document.getElementById('city').value;
+        // const state = document.getElementById('state').value;
+        // const postalCode = document.getElementById('postalCode').value;
+        // const name = document.getElementById('name').value;
+        // const email = document.getElementById('email').value;
+        // const phone = document.getElementById('phone').value;
+        // const companyName = document.getElementById('companyName').value;
+        // console.log('City:', city, 'State:', state, 'Postal Code:', postalCode, 
+        //             'Name:', name, 'Email:', email, 'Phone:', phone, 'Company Name:', companyName);
         
-        // Example: Log the values to the console (you might replace this with your actual use case)
-        console.log('City:', city, 'State:', state, 'Postal Code:', postalCode, 
-                    'Name:', name, 'Email:', email, 'Phone:', phone, 'Company Name:', companyName);
+        const formData = {
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            postalCode: document.getElementById('postalCode').value,
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            companyName: document.getElementById('companyName').value,
+        };
+
+        // sendToHubSpot(formData);
         
         // Hide the modal overlay upon form submission and enable map interactions
         hideModal();
         enableMapInteractions();
 
         // Geocode the city/state and navigate to the area
-        geocodeAndZoom(city, state, postalCode);
+        geocodeAndZoom(formData.city, formData.state, formData.postalCode);
     });
     
     // Initialize the map in a non-interactive state
@@ -96,12 +132,11 @@ function initMap() {
     map.on('load', function() {
     setupControls();
     
-    // Here is where you add the click event for the pins, ensuring the map and layers are fully loaded
-    map.on('click', 'prokeep-contractors-msa-map-4djxdr', function(e) { // Replace 'prokeep-contractors-msa-map-4djxdr' with your actual layer ID
+    map.on('click', 'prokeep-contractors-msa-map-4djxdr', function(e) { // HIDE LAYER ID!!!!!!!!!!
         var coordinates = e.features[0].geometry.coordinates.slice();
         
         var properties = e.features[0].properties;
-        if (!properties) return; // Check if properties exist
+        if (!properties) return;
 
         var description = generatePopupContent(properties);
 
@@ -133,7 +168,7 @@ function setupControls() {
 
         // Extract the city from the search result context
         const city = extractCityFromPlaceName(fullSearch);
-        console.log("City extracted from Geocoder Search:", city); // Add this line for debugging
+        console.log("City extracted from Geocoder Search:", city);
 
         // Use the logic to find the nearest pin and adjust the map view accordingly
         openNearestPinPopup(longitude, latitude, city);
@@ -142,7 +177,6 @@ function setupControls() {
     function extractCityFromPlaceName(placeName) {
         // Split the place name string by commas and spaces
         const parts = placeName.split(/,\s*/);
-        // The city is usually the first part of the place name
         return parts[0];
     }
 
@@ -182,9 +216,9 @@ function enableMapInteractions() {
 
 // Function to geocode city/state and navigate to the area
 function geocodeAndZoom(city, state, postalCode) {
-    const accessToken = mapboxgl.accessToken; // Ensure your access token is correctly set
+    const accessToken = mapboxgl.accessToken;
     const query = `${city}, ${state} ${postalCode}`;
-    const country = 'US'; // ISO 3166-1 alpha-2 country code for the United States
+    const country = 'US'; // Defaulting to US
     const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json?country=${country}&access_token=${accessToken}&limit=1`;
 
     fetch(url)
@@ -193,8 +227,6 @@ function geocodeAndZoom(city, state, postalCode) {
             if (data.features.length > 0) {
                 const [longitude, latitude] = data.features[0].geometry.coordinates;
                 
-                // Instead of flying to the coordinates, pass them to openNearestPinPopup
-                // openNearestPinPopup will handle showing the pin and adjusting the map view
                 openNearestPinPopup(longitude, latitude, city);
             } else {
                 console.error('Location not found.');
@@ -222,23 +254,6 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return d; // returns the distance in kilometer
 }
 
-// function findNearestFeature(longitude, latitude, geojsonData) {
-//     let nearestFeature = null;
-//     let smallestDistance = Infinity;
-
-//     geojsonData.features.forEach(feature => {
-//         const [featureLon, featureLat] = feature.geometry.coordinates;
-//         const distance = calculateDistance(latitude, longitude, featureLat, featureLon);
-
-//         if (distance < smallestDistance) {
-//             smallestDistance = distance;
-//             nearestFeature = feature;
-//         }
-//     });
-
-//     return nearestFeature;
-// }
-
 function findNearestFeature(longitude, latitude, geojsonData, city) {
     let nearestFeatures = [];
     let nearestDistances = [];
@@ -265,7 +280,6 @@ function findNearestFeature(longitude, latitude, geojsonData, city) {
     
     // Check if any of the nearest features have the city name in their titles
     const nearestFeatureWithCity = nearestFeatures.find(feature => {
-        // console.log("Feature Properties:", feature.properties);
         return feature.properties.Name && feature.properties.Name.includes(city);
     });
     
@@ -291,9 +305,9 @@ function openNearestPinPopup(longitude, latitude, city) {
 
         // Adjust the map view with an animation to include both points
         map.fitBounds(bounds, {
-            padding: {top: 50, bottom:50, left: 50, right: 50}, // Adjust padding as needed
+            padding: {top: 50, bottom:50, left: 50, right: 50},
             maxZoom: 12, // Prevent the map from zooming in too far
-            duration: 1000 // Adjust duration of the animation as needed
+            duration: 1000 
         });
 
         // After adjusting the view, display the popup for the nearest feature
