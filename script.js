@@ -121,7 +121,7 @@ function hideModal() {
 }
 
 function initMap() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHVtdGllZG8wdTUxMmlwbzVqa2czZ3hiIn0.wpuwMijVqdWL96IVN6R5zg'; // Restricted
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
     window.map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3',
