@@ -1,7 +1,7 @@
 let myGeoJSON;
 
 function sendToHubSpot(formData) {
-    const hubSpotApiKey = 'YOUR_HUBSPOT_API_KEY'; // TEMPORARY !!!!!!!!!!!!!!
+    const hubSpotApiKey = 'YOUR_HUBSPOT_API_KEY'; // TEMPORARY
     const endpoint = `https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/${formData.email}/?hapikey=${hubSpotApiKey}`;
 
     const data = {
@@ -121,7 +121,7 @@ function hideModal() {
 }
 
 function initMap() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHQ1eHZqY2QwNHlsMmxzNmo4eGh0eGljIn0.QF4qv-luDA9jECbYRTshJA';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHVtdGllZG8wdTUxMmlwbzVqa2czZ3hiIn0.wpuwMijVqdWL96IVN6R5zg';
     window.map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3',
