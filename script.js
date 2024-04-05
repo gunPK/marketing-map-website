@@ -121,7 +121,7 @@ function hideModal() {
 }
 
 function initMap() {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHVtdGllZG8wdTUxMmlwbzVqa2czZ3hiIn0.wpuwMijVqdWL96IVN6R5zg';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2JhY2hwayIsImEiOiJjbHVtdGllZG8wdTUxMmlwbzVqa2czZ3hiIn0.wpuwMijVqdWL96IVN6R5zg'; // Restricted
     window.map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/gbachpk/cltdb5k8600or01rac2wbh0q3',
@@ -132,7 +132,7 @@ function initMap() {
     map.on('load', function() {
     setupControls();
     
-    map.on('click', 'prokeep-contractors-msa-map-4djxdr', function(e) { // HIDE LAYER ID!!!!!!!!!!
+    map.on('click', 'prokeep-contractors-msa-map-4djxdr', function(e) {
         var coordinates = e.features[0].geometry.coordinates.slice();
         
         var properties = e.features[0].properties;
