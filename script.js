@@ -148,6 +148,61 @@ function initMap() {
     });
 
 }
+// function setupControls() {
+//     const geocoder = new MapboxGeocoder({
+//         accessToken: mapboxgl.accessToken,
+//         mapboxgl: mapboxgl,
+//         marker: false
+//     });
+
+//     // Listen for the 'result' event on the geocoder to handle search results
+//     geocoder.on('result', function(e) {
+//         // Extract the location's longitude and latitude from the search result
+//         const longitude = e.result.geometry.coordinates[0];
+//         const latitude = e.result.geometry.coordinates[1];
+
+//         // console.log("Result Object:", e.result);
+
+//         const fullSearch = e.result.place_name;
+//         console.log("Full Search Query:", fullSearch);
+
+//         // Extract the city from the search result context
+//         const city = extractCityFromPlaceName(fullSearch);
+//         console.log("City extracted from Geocoder Search:", city);
+
+//         // Use the logic to find the nearest pin and adjust the map view accordingly
+//         openNearestPinPopup(longitude, latitude, city);
+//     });
+
+//     function extractCityFromPlaceName(placeName) {
+//         // Split the place name string by commas and spaces
+//         const parts = placeName.split(/,\s*/);
+//         return parts[0];
+//     }
+
+//     const controlsContainer = document.createElement('div');
+//     controlsContainer.id = 'controls-container';
+//     document.getElementById('map').appendChild(controlsContainer);
+//     controlsContainer.appendChild(geocoder.onAdd(map));
+
+//     // Create and configure the 'Reset View' button
+//     const resetButton = document.createElement('button');
+//     resetButton.textContent = 'Reset View';
+//     resetButton.id = 'reset-button';
+//     resetButton.addEventListener('click', function() {
+//         map.flyTo({
+//             center: [-95.7129, 37.0902],
+//             zoom: 3,
+//             bearing: 0,
+//             pitch: 0,
+//             essential: true
+//         });
+//     });
+
+//     // Insert the reset button into the controls container
+//     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
+// }
+
 function setupControls() {
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -157,21 +212,31 @@ function setupControls() {
 
     // Listen for the 'result' event on the geocoder to handle search results
     geocoder.on('result', function(e) {
-        // Extract the location's longitude and latitude from the search result
-        const longitude = e.result.geometry.coordinates[0];
-        const latitude = e.result.geometry.coordinates[1];
+        // Reset the map view to the initial position before processing the search results
+        map.flyTo({
+            center: [-95.7129, 37.0902],
+            zoom: 3,
+            bearing: 0,
+            pitch: 0,
+            essential: true
+        });
 
-        // console.log("Result Object:", e.result);
+        // Allow a slight delay for the map to reset its view
+        setTimeout(function() {
+            // Extract the location's longitude and latitude from the search result
+            const longitude = e.result.geometry.coordinates[0];
+            const latitude = e.result.geometry.coordinates[1];
 
-        const fullSearch = e.result.place_name;
-        console.log("Full Search Query:", fullSearch);
+            const fullSearch = e.result.place_name;
+            console.log("Full Search Query:", fullSearch);
 
-        // Extract the city from the search result context
-        const city = extractCityFromPlaceName(fullSearch);
-        console.log("City extracted from Geocoder Search:", city);
+            // Extract the city from the search result context
+            const city = extractCityFromPlaceName(fullSearch);
+            console.log("City extracted from Geocoder Search:", city);
 
-        // Use the logic to find the nearest pin and adjust the map view accordingly
-        openNearestPinPopup(longitude, latitude, city);
+            // Use the logic to find the nearest pin and adjust the map view accordingly
+            openNearestPinPopup(longitude, latitude, city);
+        }, 500); // Delay time in milliseconds, adjust as needed
     });
 
     function extractCityFromPlaceName(placeName) {
@@ -202,6 +267,7 @@ function setupControls() {
     // Insert the reset button into the controls container
     controlsContainer.insertBefore(resetButton, controlsContainer.firstChild);
 }
+
 
 function enableMapInteractions() {
     map.boxZoom.enable();
