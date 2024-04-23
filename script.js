@@ -236,7 +236,7 @@ function setupControls() {
 
             // Use the logic to find the nearest pin and adjust the map view accordingly
             openNearestPinPopup(longitude, latitude, city);
-        }, 500); // Delay time in milliseconds
+        }, 800); // Delay time in milliseconds
     });
 
     function extractCityFromPlaceName(placeName) {
