@@ -209,7 +209,7 @@ function setupControls() {
         mapboxgl: mapboxgl,
         marker: false,
         countries: 'us', //limit search to the united states
-        types: 'region,place', //limit search results to regions (states), and places (cities)
+        types: 'region,place,postcode', //limit search results to regions (states), and places (cities)
     });
 
     // Listen for the 'result' event on the geocoder to handle search results
