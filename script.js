@@ -207,7 +207,9 @@ function setupControls() {
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-        marker: false
+        marker: false,
+        countries: 'us', //limit search to the united states
+        types: 'region,place', //limit search results to regions (states), and places (cities)
     });
 
     // Listen for the 'result' event on the geocoder to handle search results
